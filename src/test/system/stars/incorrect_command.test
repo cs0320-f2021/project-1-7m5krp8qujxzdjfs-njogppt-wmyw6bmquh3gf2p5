@@ -1,0 +1,11 @@
+INPUT
+stars data/stars/ten-star.csv
+naive_neighboar 1 "Proxima Centauri"
+naive_neighbours 1 Proxima Centauri
+naive_neighbors -5 "Proxima Centauri"
+OUTPUT
+Read 10 stars from data/stars/ten-star.csv
+ERROR:
+ERROR:
+ERROR:
+END
