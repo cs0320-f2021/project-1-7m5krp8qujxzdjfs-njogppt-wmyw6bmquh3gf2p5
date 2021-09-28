@@ -1,14 +1,11 @@
 package edu.brown.cs.student.main;
 
-import org.w3c.dom.Node;
+public class KDTree<V> {
 
-import java.util.*;
+  private Node<V> _root;
+  private Integer k;
 
-public class KDTree {
-  private int _dimensions;
-  private Node _root = null;
-
-  public KDTree(int _dimensions, ) {
+  public KDTree() {
 
   }
 
