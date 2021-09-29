@@ -1,54 +1,60 @@
 package edu.brown.cs.student.main;
 
-public class Node<K> {
-  private K key;
-  private int depth = 0;
-  private static int k = 0;
-  private Node<K> parent = null;
-  private Node<K> lesser = null;
-  private Node<K> greater = null;
+public class Node<V> {
+
+  private V _key; // generic
+  private int _depth = 0; // location of this node within the tree
+
+  private static int _k = 0; // the dimensions of the space (ex. 3-dimensional space)
+
+  private Node<V> _parent = null;
+  private Node<V> _lesser = null; // left child node
+  private Node<V> _greater = null; // right child node
 
 
-  public Node(K key, int k) {
-    this.key = key;
-    this.k = k;
+
+  public Node(V key, int depth, int k) {
+    this._key = key;
+    this._k = k;
+    this._depth = depth;
   }
 
-  public Node(K key, int depth, int k) {
-    this.key = key;
-    this.k = k;
-    this.depth = depth;
+  public Node<V> getParent() {
+    return _parent;
   }
 
-  public Node<K> getParent() {
-    return parent;
+  public void setParent(Node<V> parent) {
+    this._parent = parent;
   }
 
-  public void setParent(Node<K> parent) {
-    this.parent = parent;
+  public Node<V> getLesser() {
+    return _lesser;
   }
 
-  public Node<K> getLesser() {
-    return lesser;
+  public void setLesser(Node<V> lesser) {
+    this._lesser = lesser;
   }
 
-  public void setLesser(Node<K> lesser) {
-    this.lesser = lesser;
+  public Node<V> getGreater() {
+    return _greater;
   }
 
-  public Node<K> getGreater() {
-    return greater;
-  }
-
-  public void setGreater(Node<K> greater) {
-    this.greater = greater;
+  public void setGreater(Node<V> greater) {
+    this._greater = greater;
   }
 
   public int getDepth() {
-    return depth;
+    return _depth;
+  }
+  public void setDepth(int depth) {
+    this._depth = depth;
   }
 
-  public K getKey() {
-    return key;
+  public V getKey() {
+    return _key;
+  }
+
+  public void setKey(V key) {
+    this._key = key;
   }
 }
