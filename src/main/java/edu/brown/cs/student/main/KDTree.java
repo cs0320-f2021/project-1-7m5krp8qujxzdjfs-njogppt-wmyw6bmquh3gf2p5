@@ -10,6 +10,7 @@ public class KDTree<V> {
   public KDTree(Integer k, Comparator<V> comparator) {
     this._k =  k;
     this._comparator = comparator;
+
   }
 
   public void addNode(V val) {
