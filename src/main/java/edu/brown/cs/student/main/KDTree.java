@@ -28,7 +28,7 @@ public class KDTree<V> {
         leftList), this.getMidpointToNode(depth + 1, rightList), depth);
   }
 
-  public ArrayList<V> sortByKDimensions(int k, List<V> userList) {
+  public ArrayList<V> sortByKDimensions(int dim, List<V> userList) {
     return null;
   }
 
@@ -41,6 +41,9 @@ public class KDTree<V> {
 
     newNode.setLesser(left);
     newNode.setGreater(right);
+    left.setParent(newNode);
+    right.setParent(newNode);
+
     return newNode;
   }
 
