@@ -7,8 +7,9 @@ public class KDTree<V> {
 
   private Comparator<V> _comparator;
 
-  public KDTree(Integer k) {
+  public KDTree(Integer k, Comparator<V> comparator) {
     this._k =  k;
+    this._comparator = comparator;
   }
 
   public void addNode(V val) {
@@ -27,7 +28,7 @@ public class KDTree<V> {
       int axis = currNode.getDepth() % _k; // what attribute we're looking at at this level
       if(this._comparator.compare(currNode.getKey(), val, axis) >= 0) { // lesser          !!!!!!!!!!!!!!!!!!!--figure out way to compare--!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if(currNode.getLesser() == null) { // no left child
-          Node<V> newNode = new Node<>(val, currNode.getDepth() +1, _k); // create new node
+          Node<V> newNode = new Node<>(val, currNode.getDepth() + 1, _k); // create new node
           newNode.setParent(currNode); // child points at parent
           currNode.setLesser(newNode); // parent points at child
           break; // exit loop
@@ -35,7 +36,7 @@ public class KDTree<V> {
         currNode = currNode.getLesser(); // if there is a left child, set currNode to it
       } else { //greater
         if(currNode.getGreater() == null) { // no right child
-          Node<V> newNode = new Node<>(val, currNode.getDepth() +1, _k); // create new node
+          Node<V> newNode = new Node<>(val, currNode.getDepth() + 1, _k); // create new node
           newNode.setParent(currNode); // child points at parent
           currNode.setGreater(newNode); // parent points at child
           break; // exit loop
