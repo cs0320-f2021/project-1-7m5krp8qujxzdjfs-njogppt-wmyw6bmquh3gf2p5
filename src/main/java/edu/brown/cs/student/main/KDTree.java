@@ -8,8 +8,8 @@ public class KDTree<V> {
   private Comparator<V> _comparator;
 
   public KDTree(Integer k, Comparator<V> comparator) {
-    this._k =  k;
     this._comparator = comparator;
+    this._k =  k;
   }
 
   public void addNode(V val) {
