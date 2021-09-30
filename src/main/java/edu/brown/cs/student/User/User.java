@@ -1,8 +1,5 @@
 package edu.brown.cs.student.User;
 
-import edu.brown.cs.student.main.Comparator;
-import edu.brown.cs.student.main.Node;
-
 import java.util.Collections;
 
 /**
@@ -29,57 +26,21 @@ public class User {
     this.age = age;
   }
 
-  public int getDimensionValue(int depth, int currentDepth, int k) {
-    int dimension = currentDepth % k;
-    if (currentDepth > depth) {
-      return -1;
-    } else if (dimension == 1) {
-      return this.weight;
-    } else if (dimension == 2) {
-      return this.height;
-    } else if (dimension == 3) {
-      return this.age;
-    }
-    else {
-      return -1;
-    }
+
+  public int getWeight(){
+    return this.weight;
   }
 
+  public int getHeight(){
+    return this.height;
+  }
+
+  public int getAge(){
+    return this.age;
+  }
 
 }
 
-static class UserComparatorByDimension extends Comparator<User> {
-  int depth;
-  int currentDepth;
-  int k;
 
 
-  UserComparatorByDimension(int depth, int currentDepth, int k) {
-    this.depth = depth;
-    this.currentDepth = currentDepth;
-    this.k = k;
-  }
 
-  @Override
-  public int compare(User o1, User o2) {
-    // TODO: modify depending on caseMatters
-    if(o1.getDimensionValue(this.depth, this.currentDepth, this.k) > (o2.getDimensionValue(this.depth, this.currentDepth, this.k))) return 1;
-    if(o1.getDimensionValue(this.depth, this.currentDepth, this.k) > (o2.getDimensionValue(this.depth, this.currentDepth, this.k))) return -1;
-    return 0;
-  }
-
-
-  public static <T extends Comparable<T>> void sortSomeRecords(Comparator<T> comp, List<T> lst) {
-    for(int i=0; i<lst.size(); i++) {
-      for(int j=i+1; j<lst.size(); j++) {
-        if(comp.compare(lst.get(j), lst.get(i)) < 0) {
-          T swap = lst.get(i);
-          lst.set(i, lst.get(j));
-          lst.set(j, swap);
-        }
-      }
-    }
-  }
-
-  initial instance of comparator
-Collections.sort(Comparator<T> comp, List<T> lst);
