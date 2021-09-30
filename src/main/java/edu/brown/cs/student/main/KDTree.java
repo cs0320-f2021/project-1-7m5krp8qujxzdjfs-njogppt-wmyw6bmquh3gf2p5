@@ -1,5 +1,9 @@
 package edu.brown.cs.student.main;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 public class KDTree<V> {
 
   private Node<V> _root; // root node
@@ -12,6 +16,54 @@ public class KDTree<V> {
     this._k =  k;
   }
 
+  public Node<V> getMidpointToNode(int depth, List<V> userList) {
+    ArrayList<V> sortedUserList = sortByKDimensions(depth, userList);
+    int midPointIndex = (sortedUserList.size() / 2) - 1;
+//    User userToNode = sortedUserList.get(midPointIndex);
+
+    List<V> leftList = sortedUserList.subList(0, midPointIndex);
+    List<V> rightList = sortedUserList.subList(midPointIndex + 1, sortedUserList.size());
+
+    return this.createNode(sortedUserList.get(midPointIndex), this.getMidpointToNode(depth + 1,
+        leftList), this.getMidpointToNode(depth + 1, rightList), depth);
+  }
+
+  public ArrayList<V> sortByKDimensions(int dim, List<V> userList) {
+    return null;
+  }
+
+  public Node<V> createNode(V val, Node<V> left, Node<V> right, int depth) {
+    Node<V> newNode = new Node<>(val, depth, _k);
+
+    if (_root == null) {
+      _root = newNode;
+    }
+
+    newNode.setLesser(left);
+    newNode.setGreater(right);
+    left.setParent(newNode);
+    right.setParent(newNode);
+
+    return newNode;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // kinda useless ig
   public void addNode(V val) {
     if (val == null) {
       return; // exit
