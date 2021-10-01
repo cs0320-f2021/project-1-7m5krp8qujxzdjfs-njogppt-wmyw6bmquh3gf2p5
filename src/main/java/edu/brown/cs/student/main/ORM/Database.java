@@ -1,7 +1,6 @@
 package edu.brown.cs.student.main.ORM;
 
 import edu.brown.cs.student.main.dataTypes.Users;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -11,6 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+/**
+ * Class that implements the ORM methods.
+ */
 public class Database {
 
   private static Connection conn = null;
@@ -29,6 +31,13 @@ public class Database {
     stat.close();
   }
 
+  /**
+   * Inserts a given object into the connected database.
+   * @param datum - The object being added in.
+   * @param <T> - The class of the object (users, rent, or reviews)
+   * @throws IllegalAccessException
+   * @throws SQLException
+   */
   public <T> void insert(T datum) throws IllegalAccessException, SQLException {
     try {
       String table = datum.getClass().getSimpleName().toLowerCase();
@@ -36,15 +45,19 @@ public class Database {
       PreparedStatement prep =
           conn.prepareStatement(sql);
       Field[] fields = datum.getClass().getDeclaredFields();
-      prep.setString(1, table);
-      int cnt = 2;
+      int cnt = 1;
       for (Field f : fields) {
+        f.setAccessible(true);
         if (f.getName().equals("id")) {
           prep.setInt(fields.length, f.getInt(datum));
         } else {
-          prep.setString(..., f.get(datum));
+          prep.setString(cnt, String.valueOf(f.get(datum)));
+          cnt += 1;
         }
       }
+      prep.addBatch();
+      prep.executeBatch();
+      prep.close();
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }

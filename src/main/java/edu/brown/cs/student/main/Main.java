@@ -6,11 +6,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
 import com.google.common.collect.ImmutableMap;
-
+import edu.brown.cs.student.main.ORM.Database;
+import edu.brown.cs.student.main.dataTypes.Users;
 import freemarker.template.Configuration;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -65,11 +66,11 @@ public final class Main {
     try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
       String input;
       StarData starData = new StarData("");
+      Database database = null;
       while ((input = br.readLine()) != null) {
         try {
           input = input.trim();
-          // regex expression found here: https://tinyurl.com/5xd7n29n
-          String[] arguments = input.split("\\s(?=(?:\"[^\"]*\"|[^\"])*$)");
+          String[] arguments = splitHelper(input);
           String command = arguments[0];
           switch (command) {
             case "add": this.addHelper(arguments[1], arguments[2]);
@@ -98,6 +99,22 @@ public final class Main {
                 }
               } else {
                 throw new IOException("ERROR: The arguments you provided were incorrect.");
+              }
+              break;
+            case "database":
+              database = new Database(arguments[1]);
+              System.out.println("Database at " + arguments[1] + " loaded in.");
+              break;
+            case "insert":
+              if (arguments.length == 8) {
+                Users newUser = new Users(arguments[1], arguments[2], arguments[3], arguments[4],
+                    arguments[5], arguments[6], arguments[7]);
+                if (database != null) {
+                  database.insert(newUser);
+                  System.out.println("New user added.");
+                } else {
+                  throw new IOException("ERROR: There is no database loaded in.");
+                }
               }
               break;
             default:
@@ -206,6 +223,21 @@ public final class Main {
     double num1 = Double.parseDouble(number1);
     double num2 = Double.parseDouble(number2);
     System.out.println(mbot.subtract(num1, num2));
+  }
+
+  /**
+   * A helper that splits the input string appropriately.
+   * @param input - The input to the REPL
+   * @return - The array of commands.
+   */
+  private String[] splitHelper(String input) {
+    String[] split = input.split(" ");
+    if (split[0].equals("naive_neighbors")) {
+      // regex expression found here: https://tinyurl.com/5xd7n29n
+      return input.split("\\s(?=(?:\"[^\"]*\"|[^\"])*$)");
+    } else {
+      return split;
+    }
   }
 
 }
