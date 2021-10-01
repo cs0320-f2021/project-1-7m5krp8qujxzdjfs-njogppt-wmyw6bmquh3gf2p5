@@ -1,29 +1,26 @@
 package edu.brown.cs.student.main.dataTypes;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * A class that stores review data.
  */
 public class Reviews {
 
   private int id;
-  private String review_text;
-  private String review_summary;
-  private Date review_date;
+  private String reviewText;
+  private String reviewSummary;
+  private String reviewDate;
 
   /**
    * The constructor for a review object.
    * @param id - The unique id
-   * @param review_text - The main text of the review
-   * @param review_summary - The summary of the review
-   * @param review_date - The date the review was published
+   * @param reviewText - The main text of the review
+   * @param reviewSummary - The summary of the review
+   * @param reviewDate - The date the review was published
    */
-  public Reviews(int id, String review_text, String review_summary, Date review_date) {
+  public Reviews(int id, String reviewText, String reviewSummary, String reviewDate) {
     this.id = id;
-    this.review_text = review_text;
-    this.review_summary = review_summary;
-    this.review_date = review_date;
+    this.reviewText = reviewText;
+    this.reviewSummary = reviewSummary;
+    this.reviewDate = reviewDate;
   }
 }

@@ -2,9 +2,11 @@ package edu.brown.cs.student.main.ORM;
 
 import edu.brown.cs.student.main.dataTypes.Users;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -27,9 +29,40 @@ public class Database {
     stat.close();
   }
 
-  public <T> void insert(T datum) throws IllegalAccessException {
-    String table = datum.getClass().getSimpleName().toLowerCase();
-    Field[] fields = datum.getClass().getDeclaredFields();
+  public <T> void insert(T datum) throws IllegalAccessException, SQLException {
+    try {
+      String table = datum.getClass().getSimpleName().toLowerCase();
+      String sql = this.checkClass(table);
+      PreparedStatement prep =
+          conn.prepareStatement(sql);
+      Field[] fields = datum.getClass().getDeclaredFields();
+      prep.setString(1, table);
+      int cnt = 2;
+      for (Field f : fields) {
+        if (f.getName().equals("id")) {
+          prep.setInt(fields.length, f.getInt(datum));
+        } else {
+          prep.setString(..., f.get(datum));
+        }
+      }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  /**
+   * Helper method that returns the appropriate INSERT sql command.
+   * @param className - The table to insert into
+   * @return - The appropraite sql command.
+   * @throws IOException - Thrown when such a table does not exist.
+   */
+  private String checkClass(String className) throws IOException {
+    switch (className) {
+      case "users": return "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)";
+      case "rent": return "INSERT INTO rent VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+      case "reviews": return "INSERT INTO reviews VALUES (?, ?, ?, ?)";
+      default: throw new IOException("ERROR: This table is not handled by the ORM.");
+    }
   }
 
   public <T> void delete(T datum) {
@@ -37,11 +70,11 @@ public class Database {
   }
 
   public List<Users> where(String searchBy, String searchFor) {
-
+    return null;
   }
 
   public <T> void update(T toUpdate, String updateBy) {
-    
+
   }
 
   public void sql(String command) {

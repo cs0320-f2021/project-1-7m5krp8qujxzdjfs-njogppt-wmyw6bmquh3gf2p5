@@ -1,17 +1,16 @@
 package edu.brown.cs.student.main.dataTypes;
 
-import java.util.Collections;
 
 /**
  * A class that stores user info.
  */
 public class Users {
 
-  private final int userId;
-  private int weight;
+  private String userId;
+  private String weight;
   private String bustSize;
-  private int height;
-  private int age;
+  private String height;
+  private String age;
   private String bodyType;
   private String horoscope;
 
@@ -25,7 +24,8 @@ public class Users {
    * @param bodyType - The user's body type
    * @param horoscope - The user's horoscope
    */
-  public Users(int id, int weight, String bustSize, int height, int age, String bodyType, String horoscope) {
+  public Users(String id, String weight, String bustSize, String height, String age,
+               String bodyType, String horoscope) {
     this.userId = id;
     this.weight = weight;
     this.bustSize = bustSize;
@@ -36,16 +36,33 @@ public class Users {
   }
 
 
+  /**
+   * Gets the weight of the user.
+   * @return - The user's weight
+   */
   public int getWeight() {
-    return this.weight;
+    String[] w = this.weight.split("l");
+    int lbs = Integer.parseInt(w[0]);
+    return lbs;
   }
 
+  /**
+   * Gets the height in inches.
+   * @return - The height of a user in inches.
+   */
   public int getHeight() {
-    return this.height;
+    String[] h = this.height.split("'|\"");
+    int ft = Integer.parseInt(h[0]);
+    int inches = Integer.parseInt(h[1]);
+    return ft * 12 + inches;
   }
 
+  /**
+   * Gets the age of the user.
+   * @return - The user's age.
+   */
   public int getAge() {
-    return this.age;
+    return Integer.parseInt(this.age);
   }
 
 }
