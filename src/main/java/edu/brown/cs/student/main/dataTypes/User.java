@@ -1,4 +1,4 @@
-package edu.brown.cs.student.User;
+package edu.brown.cs.student.main.dataTypes;
 
 import java.util.Collections;
 
@@ -9,8 +9,11 @@ public class User {
 
   private final int id;
   private int weight;
+  private String bustSize;
   private int height;
   private int age;
+  private String bodyType;
+  private String horoscope;
 
   /**
    * User constructor
@@ -19,11 +22,14 @@ public class User {
    * @param height - The user's height in inches
    * @param age - The user's age
    */
-  public User(int id, int weight, int height, int age) {
+  public User(int id, int weight, String bustSize, int height, int age, String bodyType, String horoscope) {
     this.id = id;
     this.weight = weight;
+    this.bustSize = bustSize;
     this.height = height;
     this.age = age;
+    this.bodyType = bodyType;
+    this.horoscope = horoscope;
   }
 
 
