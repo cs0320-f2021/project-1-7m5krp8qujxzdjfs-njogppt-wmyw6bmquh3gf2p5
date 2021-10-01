@@ -9,15 +9,13 @@ public class KDTree<V> {
   private Node<V> _root; // root node
   private Integer _k; // the dimensions of the space (ex. 3-dimensional space)
 
-  private Comparator<V> _comparator;
-
-  public KDTree(Integer k, Comparator<V> comparator) {
-    this._comparator = comparator;
+  public KDTree(Integer k) {
     this._k =  k;
   }
 
   public Node<V> getMidpointToNode(int depth, List<V> userList) {
-    ArrayList<V> sortedUserList = sortByKDimensions(depth, userList);
+    UserHandlerClass userSorter = new UserHandlerClass();
+    ArrayList<V> sortedUserList = userSorter.sortedByDimension(depth, userList);
     int midPointIndex = (sortedUserList.size() / 2) - 1;
 //    User userToNode = sortedUserList.get(midPointIndex);
 
@@ -28,9 +26,6 @@ public class KDTree<V> {
         leftList), this.getMidpointToNode(depth + 1, rightList), depth);
   }
 
-  public ArrayList<V> sortByKDimensions(int dim, List<V> userList) {
-    return null;
-  }
 
   public Node<V> createNode(V val, Node<V> left, Node<V> right, int depth) {
     Node<V> newNode = new Node<>(val, depth, _k);
