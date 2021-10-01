@@ -1,5 +1,6 @@
-package edu.brown.cs.student.main;
+package edu.brown.cs.student.main.KDTree;
 
+import edu.brown.cs.student.main.UserHandlerClass;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;

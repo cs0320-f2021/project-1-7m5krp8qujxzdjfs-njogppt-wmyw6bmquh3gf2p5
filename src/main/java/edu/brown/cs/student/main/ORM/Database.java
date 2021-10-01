@@ -1,13 +1,13 @@
 package edu.brown.cs.student.main.ORM;
 
+import edu.brown.cs.student.main.dataTypes.Users;
+
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import edu.brown.cs.student.main.dataTypes.User;
+import java.util.List;
 
 public class Database {
 
@@ -27,10 +27,25 @@ public class Database {
     stat.close();
   }
 
-  public void insert(User datum) throws IllegalAccessException {
-    String table = datum.getClass().getSimpleName();
+  public <T> void insert(T datum) throws IllegalAccessException {
+    String table = datum.getClass().getSimpleName().toLowerCase();
     Field[] fields = datum.getClass().getDeclaredFields();
-    int userId = fields[0].getInt(datum);
+  }
+
+  public <T> void delete(T datum) {
+
+  }
+
+  public List<Users> where(String searchBy, String searchFor) {
+
+  }
+
+  public <T> void update(T toUpdate, String updateBy) {
+    
+  }
+
+  public void sql(String command) {
+
   }
 
 }

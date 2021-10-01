@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * A class that stores review data.
  */
-public class Review {
+public class Reviews {
 
   private int id;
   private String review_text;
@@ -20,7 +20,7 @@ public class Review {
    * @param review_summary - The summary of the review
    * @param review_date - The date the review was published
    */
-  public Review(int id, String review_text, String review_summary, Date review_date) {
+  public Reviews(int id, String review_text, String review_summary, Date review_date) {
     this.id = id;
     this.review_text = review_text;
     this.review_summary = review_summary;
