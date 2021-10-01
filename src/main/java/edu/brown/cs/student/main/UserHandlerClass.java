@@ -1,6 +1,6 @@
 package edu.brown.cs.student.main;
 
-import edu.brown.cs.student.User.User;
+import edu.brown.cs.student.main.dataTypes.User;
 
 import java.util.Comparator;
 import java.util.List;

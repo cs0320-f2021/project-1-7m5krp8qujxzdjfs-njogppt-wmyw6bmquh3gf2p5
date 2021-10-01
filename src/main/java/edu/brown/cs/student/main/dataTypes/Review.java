@@ -1,5 +1,8 @@
 package edu.brown.cs.student.main.dataTypes;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * A class that stores review data.
  */

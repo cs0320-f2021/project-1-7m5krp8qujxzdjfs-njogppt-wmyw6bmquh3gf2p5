@@ -7,12 +7,12 @@ import java.util.Collections;
  */
 public class User {
 
-  private final int id;
+  private final int user_id;
   private int weight;
-  private String bustSize;
+  private String bust_size;
   private int height;
   private int age;
-  private String bodyType;
+  private String body_type;
   private String horoscope;
 
   /**
@@ -22,13 +22,13 @@ public class User {
    * @param height - The user's height in inches
    * @param age - The user's age
    */
-  public User(int id, int weight, String bustSize, int height, int age, String bodyType, String horoscope) {
-    this.id = id;
+  public User(int id, int weight, String bust_size, int height, int age, String body_type, String horoscope) {
+    this.user_id = id;
     this.weight = weight;
-    this.bustSize = bustSize;
+    this.bust_size = bust_size;
     this.height = height;
     this.age = age;
-    this.bodyType = bodyType;
+    this.body_type = body_type;
     this.horoscope = horoscope;
   }
 
