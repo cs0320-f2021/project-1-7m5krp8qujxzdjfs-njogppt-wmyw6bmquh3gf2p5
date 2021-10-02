@@ -44,7 +44,7 @@ public class Database {
    * @throws IllegalAccessException - Thrown if there is a problem with the reflective access.
    * @throws SQLException - Thrown if there is a problem with the SQL command.
    */
-  public <T> void insert(T datum) throws IllegalAccessException, SQLException {
+  public <T extends DataTypes> void insert(T datum) throws IllegalAccessException, SQLException {
     try {
       String table = datum.getClass().getSimpleName().toLowerCase();
       String sql = this.checkClass(table);
@@ -89,7 +89,7 @@ public class Database {
    * @param datum - The object to be deleted.
    * @param <T> - The class of the object (Users, Reviews, Rent).
    */
-  public <T> void delete(T datum) {
+  public <T extends DataTypes> void delete(T datum) {
     try {
       String table = datum.getClass().getSimpleName().toLowerCase();
       String sql = checkDeleteBy(table);
@@ -191,6 +191,13 @@ public class Database {
     }
   }
 
+  /**
+   * Updates the given object in the database with the given value.
+   * @param toUpdate - The object to be updated.
+   * @param updateBy - The attribute being updated.
+   * @param updateWith - The new value.
+   * @param <T> - The type of data being updated.
+   */
   public <T extends DataTypes> void update(T toUpdate, String updateBy, String updateWith) {
     try {
       String table = toUpdate.getClass().getSimpleName().toLowerCase();
@@ -239,10 +246,11 @@ public class Database {
         ResultSet results = prep.executeQuery();
         ResultSetMetaData resData = results.getMetaData();
         int columnCount = resData.getColumnCount();
+        // Prints out results by printing the attribute values row by row
         while (results.next()) {
           StringBuilder res = new StringBuilder();
           for (int i = 1; i <= columnCount; i++) {
-            String toAdd = "";
+            String toAdd;
             if (i != columnCount) {
               toAdd = results.getString(i) + ", ";
             } else {
@@ -253,11 +261,11 @@ public class Database {
           System.out.println(res);
         }
         results.close();
+        prep.close();
       }
       prep.close();
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
   }
-
 }

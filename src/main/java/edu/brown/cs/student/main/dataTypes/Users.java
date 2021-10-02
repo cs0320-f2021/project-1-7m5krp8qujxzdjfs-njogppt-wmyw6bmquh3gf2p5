@@ -1,6 +1,5 @@
 package edu.brown.cs.student.main.dataTypes;
 
-
 /**
  * A class that stores user info.
  */
@@ -35,7 +34,6 @@ public class Users implements DataTypes {
     this.horoscope = horoscope;
   }
 
-
   /**
    * Gets the weight of the user.
    * @return - The user's weight
@@ -65,6 +63,10 @@ public class Users implements DataTypes {
     return Integer.parseInt(this.age);
   }
 
+  /**
+   * Returns the id of the user.
+   * @return - The user's id.
+   */
   public int getID() {
     return Integer.parseInt(this.userId);
   }

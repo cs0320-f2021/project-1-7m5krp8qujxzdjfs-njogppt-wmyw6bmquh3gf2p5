@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
@@ -251,7 +250,7 @@ public final class Main {
   }
 
   /**
-   * A helper that handles running the given command on the ORM.
+   * A helper that handles running insert, delete, and update commands on the ORM.
    * @param command - One of the ORM commands.
    * @param arguments - The list of arguments given.
    * @param db - The database
@@ -273,7 +272,7 @@ public final class Main {
             System.out.println("User with user_id " + newUser.getID() + " deleted.");
             break;
           case "update":
-            // add twp arguments to the above template giving what to update by then with what value
+            // add two arguments to the above template giving what to update by then with what value
             String updateBy = arguments[8];
             String updateWith = arguments[9];
             db.update(newUser, updateBy, updateWith);
@@ -282,7 +281,7 @@ public final class Main {
           default: throw new IOException("ERROR: The given command is not supported.");
         }
 
-      /* for rent provide id user_id item_id fit rating rented_for category
+      /* for rent provide id fit user_id item_id rating rented_for category
       and size in that order. */
       } else if (arguments.length == 9 || arguments.length == 11) {
         Rent newRent = new Rent(Integer.parseInt(arguments[1]), arguments[2], arguments[3],
@@ -321,14 +320,14 @@ public final class Main {
             break;
           case "delete":
             db.delete(newReview);
-            System.out.println("User with user_id " + newReview.getID() + " deleted.");
+            System.out.println("Review with id " + newReview.getID() + " deleted.");
             break;
           case "update":
             // add twp arguments to the above template giving what to update by then with what value
             String updateBy = arguments[5];
             String updateWith = arguments[6];
             db.update(newReview, updateBy, updateWith);
-            System.out.println("User with user_id: " + newReview.getID() + " updated.");
+            System.out.println("Review with id: " + newReview.getID() + " updated.");
             break;
           default: throw new IOException("ERROR: The given command is not supported.");
         }
@@ -337,5 +336,4 @@ public final class Main {
       System.out.println(e.getMessage());
     }
   }
-
 }

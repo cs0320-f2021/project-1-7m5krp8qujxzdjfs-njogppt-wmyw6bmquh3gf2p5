@@ -42,10 +42,6 @@ public class Rent implements DataTypes {
     return "Rental data with id: " + this.id;
   }
 
-  /**
-   * Gets the id of the rental.
-   * @return - The unique id.
-   */
   public int getID() {
     return this.id;
   }
