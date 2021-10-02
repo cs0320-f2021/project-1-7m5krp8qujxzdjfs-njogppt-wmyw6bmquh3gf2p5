@@ -1,10 +1,9 @@
 package edu.brown.cs.student.main.dataTypes;
 
-
 /**
  * A class that stores user info.
  */
-public class Users {
+public class Users implements DataTypes {
 
   private String userId;
   private String weight;
@@ -35,7 +34,6 @@ public class Users {
     this.horoscope = horoscope;
   }
 
-
   /**
    * Gets the weight of the user.
    * @return - The user's weight
@@ -65,11 +63,20 @@ public class Users {
     return Integer.parseInt(this.age);
   }
 
-  public String getID() {
-    return this.userId;
+  /**
+   * Returns the id of the user.
+   * @return - The user's id.
+   */
+  public int getID() {
+    return Integer.parseInt(this.userId);
   }
 
-  public int getDimensionValue (int currentDepth) {
+  @Override
+  public String toString() {
+    return "User with id: " + this.userId;
+  }
+
+  public int getDimensionValue(int currentDepth) {
     int dimension = currentDepth % 3;
     if (dimension == 0) {
       return this.getWeight();
@@ -79,9 +86,4 @@ public class Users {
       return this.getAge();
     }
   }
-
 }
-
-
-
-

@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import edu.brown.cs.student.main.ORM.Database;
+import edu.brown.cs.student.main.dataTypes.DataTypes;
 import edu.brown.cs.student.main.dataTypes.Rent;
 import edu.brown.cs.student.main.dataTypes.Reviews;
 import edu.brown.cs.student.main.dataTypes.Users;
@@ -74,7 +74,6 @@ public final class Main {
           input = input.trim();
           String[] arguments = splitHelper(input);
           String command = arguments[0];
-          System.out.println(Arrays.toString(arguments));
           switch (command) {
             case "add": this.addHelper(arguments[1], arguments[2]);
             break;
@@ -108,12 +107,30 @@ public final class Main {
               database = new Database(arguments[1]);
               System.out.println("Database at " + arguments[1] + " loaded in.");
               break;
-            default:
+            case "insert":
+            case "delete":
+            case "update":
               this.ormHelper(command, arguments, database);
               break;
+            case "select":
+              if (database != null) {
+                List<DataTypes> results = database.where(arguments[1], arguments[2], arguments[3]);
+                System.out.println(results);
+              } else {
+                throw new RuntimeException("ERROR: There is no database connected.");
+              }
+              break;
+            case "sql":
+              if (database != null) {
+                database.sql(arguments[1]);
+              } else {
+                throw new RuntimeException("ERROR: There is not database connected.");
+              }
+              break;
+            default: throw new IOException("ERROR: The given command is not recognized.");
           }
         } catch (Exception e) {
-          // e.printStackTrace();
+          e.printStackTrace();
           System.out.println("ERROR: We couldn't process your input");
         }
       }
@@ -233,7 +250,7 @@ public final class Main {
   }
 
   /**
-   * A helper that handles running the given command on the ORM.
+   * A helper that handles running insert, delete, and update commands on the ORM.
    * @param command - One of the ORM commands.
    * @param arguments - The list of arguments given.
    * @param db - The database
@@ -242,7 +259,7 @@ public final class Main {
     try {
     /* for users provide user_id weight bust_size height age body_type
     and horoscope in that order */
-      if (arguments.length == 8) {
+      if (arguments.length == 8 || arguments.length == 10) {
         Users newUser = new Users(arguments[1], arguments[2], arguments[3], arguments[4],
             arguments[5], arguments[6], arguments[7]);
         switch (command) {
@@ -254,12 +271,19 @@ public final class Main {
             db.delete(newUser);
             System.out.println("User with user_id " + newUser.getID() + " deleted.");
             break;
+          case "update":
+            // add two arguments to the above template giving what to update by then with what value
+            String updateBy = arguments[8];
+            String updateWith = arguments[9];
+            db.update(newUser, updateBy, updateWith);
+            System.out.println("User with user_id: " + newUser.getID() + " updated.");
+            break;
           default: throw new IOException("ERROR: The given command is not supported.");
         }
 
-      /* for rent provide id user_id item_id fit rating rented_for category
+      /* for rent provide id fit user_id item_id rating rented_for category
       and size in that order. */
-      } else if (arguments.length == 9) {
+      } else if (arguments.length == 9 || arguments.length == 11) {
         Rent newRent = new Rent(Integer.parseInt(arguments[1]), arguments[2], arguments[3],
             arguments[4], arguments[5], arguments[6], arguments[7], arguments[8]);
         switch (command) {
@@ -269,15 +293,21 @@ public final class Main {
             break;
           case "delete":
             db.delete(newRent);
-            String id = String.valueOf(newRent.getID());
-            System.out.println("Rent data with id " + id + " deleted.");
+            System.out.println("Rent data with id " + newRent.getID() + " deleted.");
+            break;
+          case "update":
+            // add twp arguments to the above template giving what to update by then with what value
+            String updateBy = arguments[9];
+            String updateWith = arguments[10];
+            db.update(newRent, updateBy, updateWith);
+            System.out.println("Rent data with id: " + newRent.getID() + " updated.");
             break;
           default: throw new IOException("ERROR: The given command is not supported.");
         }
 
       /* for reviews provide id `review_text` `review_summary` and `review_date` in
       that order. ` delimits chunks of text. */
-      } else if (arguments.length == 5) {
+      } else if (arguments.length == 5 || arguments.length == 7) {
         String reviewText = arguments[2].replaceAll("`", "");
         String reviewSum = arguments[3].replaceAll("`", "");
         String reviewDate = arguments[4].replaceAll("`", "");
@@ -290,8 +320,14 @@ public final class Main {
             break;
           case "delete":
             db.delete(newReview);
-            String id = String.valueOf(newReview.getID());
-            System.out.println("User with user_id " + id + " deleted.");
+            System.out.println("Review with id " + newReview.getID() + " deleted.");
+            break;
+          case "update":
+            // add twp arguments to the above template giving what to update by then with what value
+            String updateBy = arguments[5];
+            String updateWith = arguments[6];
+            db.update(newReview, updateBy, updateWith);
+            System.out.println("Review with id: " + newReview.getID() + " updated.");
             break;
           default: throw new IOException("ERROR: The given command is not supported.");
         }
@@ -300,5 +336,4 @@ public final class Main {
       System.out.println(e.getMessage());
     }
   }
-
 }
