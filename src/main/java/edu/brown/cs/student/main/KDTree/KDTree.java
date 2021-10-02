@@ -1,5 +1,6 @@
-package edu.brown.cs.student.main;
+package edu.brown.cs.student.main.KDTree;
 
+import edu.brown.cs.student.main.UserHandlerClass;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +10,13 @@ public class KDTree<V> {
   private Node<V> _root; // root node
   private Integer _k; // the dimensions of the space (ex. 3-dimensional space)
 
-  private Comparator<V> _comparator;
-
-  public KDTree(Integer k, Comparator<V> comparator) {
-    this._comparator = comparator;
+  public KDTree(Integer k) {
     this._k =  k;
   }
 
   public Node<V> getMidpointToNode(int depth, List<V> userList) {
-    ArrayList<V> sortedUserList = sortByKDimensions(depth, userList);
+    UserHandlerClass userSorter = new UserHandlerClass();
+    ArrayList<V> sortedUserList = userSorter.sortedByDimension(depth, userList);
     int midPointIndex = (sortedUserList.size() / 2) - 1;
 //    User userToNode = sortedUserList.get(midPointIndex);
 
@@ -28,9 +27,6 @@ public class KDTree<V> {
         leftList), this.getMidpointToNode(depth + 1, rightList), depth);
   }
 
-  public ArrayList<V> sortByKDimensions(int dim, List<V> userList) {
-    return null;
-  }
 
   public Node<V> createNode(V val, Node<V> left, Node<V> right, int depth) {
     Node<V> newNode = new Node<>(val, depth, _k);
@@ -45,6 +41,13 @@ public class KDTree<V> {
     right.setParent(newNode);
 
     return newNode;
+  }
+
+  public double euclidianDist(double x, double y, double z, double x2, double y2, double z2) {
+    double newX = (x - x2) * (x - x2);
+    double newY = (y - y2) * (y - y2);
+    double newZ = (z - z2) * (z - z2);
+    return Math.sqrt(newX + newY + newZ);
   }
 
 
