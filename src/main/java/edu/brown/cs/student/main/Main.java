@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import edu.brown.cs.student.main.ORM.Database;
+import edu.brown.cs.student.main.dataTypes.Rent;
+import edu.brown.cs.student.main.dataTypes.Reviews;
 import edu.brown.cs.student.main.dataTypes.Users;
 import freemarker.template.Configuration;
 import joptsimple.OptionParser;
@@ -72,6 +74,7 @@ public final class Main {
           input = input.trim();
           String[] arguments = splitHelper(input);
           String command = arguments[0];
+          System.out.println(Arrays.toString(arguments));
           switch (command) {
             case "add": this.addHelper(arguments[1], arguments[2]);
             break;
@@ -105,20 +108,9 @@ public final class Main {
               database = new Database(arguments[1]);
               System.out.println("Database at " + arguments[1] + " loaded in.");
               break;
-            case "insert":
-              if (arguments.length == 8) {
-                Users newUser = new Users(arguments[1], arguments[2], arguments[3], arguments[4],
-                    arguments[5], arguments[6], arguments[7]);
-                if (database != null) {
-                  database.insert(newUser);
-                  System.out.println("New user added.");
-                } else {
-                  throw new IOException("ERROR: There is no database loaded in.");
-                }
-              }
-              break;
             default:
-              throw new IOException("ERROR: There is no command to process.");
+              this.ormHelper(command, arguments, database);
+              break;
           }
         } catch (Exception e) {
           // e.printStackTrace();
@@ -231,12 +223,81 @@ public final class Main {
    * @return - The array of commands.
    */
   private String[] splitHelper(String input) {
-    String[] split = input.split(" ");
+    String[] split = input.split("\\s(?=(?:`[^`]*`|[^`])*$)");
     if (split[0].equals("naive_neighbors")) {
       // regex expression found here: https://tinyurl.com/5xd7n29n
       return input.split("\\s(?=(?:\"[^\"]*\"|[^\"])*$)");
     } else {
       return split;
+    }
+  }
+
+  /**
+   * A helper that handles running the given command on the ORM.
+   * @param command - One of the ORM commands.
+   * @param arguments - The list of arguments given.
+   * @param db - The database
+   */
+  private void ormHelper(String command, String[] arguments, Database db) {
+    try {
+    /* for users provide user_id weight bust_size height age body_type
+    and horoscope in that order */
+      if (arguments.length == 8) {
+        Users newUser = new Users(arguments[1], arguments[2], arguments[3], arguments[4],
+            arguments[5], arguments[6], arguments[7]);
+        switch (command) {
+          case "insert":
+            db.insert(newUser);
+            System.out.println("New user data added.");
+            break;
+          case "delete":
+            db.delete(newUser);
+            System.out.println("User with user_id " + newUser.getID() + " deleted.");
+            break;
+          default: throw new IOException("ERROR: The given command is not supported.");
+        }
+
+      /* for rent provide id user_id item_id fit rating rented_for category
+      and size in that order. */
+      } else if (arguments.length == 9) {
+        Rent newRent = new Rent(Integer.parseInt(arguments[1]), arguments[2], arguments[3],
+            arguments[4], arguments[5], arguments[6], arguments[7], arguments[8]);
+        switch (command) {
+          case "insert":
+            db.insert(newRent);
+            System.out.println("New rent data added.");
+            break;
+          case "delete":
+            db.delete(newRent);
+            String id = String.valueOf(newRent.getID());
+            System.out.println("Rent data with id " + id + " deleted.");
+            break;
+          default: throw new IOException("ERROR: The given command is not supported.");
+        }
+
+      /* for reviews provide id `review_text` `review_summary` and `review_date` in
+      that order. ` delimits chunks of text. */
+      } else if (arguments.length == 5) {
+        String reviewText = arguments[2].replaceAll("`", "");
+        String reviewSum = arguments[3].replaceAll("`", "");
+        String reviewDate = arguments[4].replaceAll("`", "");
+        Reviews newReview = new Reviews(Integer.parseInt(arguments[1]), reviewText,
+            reviewSum, reviewDate);
+        switch (command) {
+          case "insert":
+            db.insert(newReview);
+            System.out.println("New review data added.");
+            break;
+          case "delete":
+            db.delete(newReview);
+            String id = String.valueOf(newReview.getID());
+            System.out.println("User with user_id " + id + " deleted.");
+            break;
+          default: throw new IOException("ERROR: The given command is not supported.");
+        }
+      }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
     }
   }
 
