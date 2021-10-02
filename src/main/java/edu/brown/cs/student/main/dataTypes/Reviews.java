@@ -23,4 +23,12 @@ public class Reviews {
     this.reviewSummary = reviewSummary;
     this.reviewDate = reviewDate;
   }
+
+  /**
+   * Returns the unique ID of the review.
+   * @return - Review's ID.
+   */
+  public int getID() {
+    return this.id;
+  }
 }

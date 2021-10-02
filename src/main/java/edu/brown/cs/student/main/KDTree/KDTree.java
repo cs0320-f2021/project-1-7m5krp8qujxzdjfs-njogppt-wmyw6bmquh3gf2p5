@@ -43,6 +43,13 @@ public class KDTree<V> {
     return newNode;
   }
 
+  public double euclidianDist(double x, double y, double z, double x2, double y2, double z2) {
+    double newX = (x - x2) * (x - x2);
+    double newY = (y - y2) * (y - y2);
+    double newZ = (z - z2) * (z - z2);
+    return Math.sqrt(newX + newY + newZ);
+  }
+
 
 
 

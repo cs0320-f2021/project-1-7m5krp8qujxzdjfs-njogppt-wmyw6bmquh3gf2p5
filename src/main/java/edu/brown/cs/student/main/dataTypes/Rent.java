@@ -36,4 +36,12 @@ public class Rent {
     this.category = category;
     this.size = size;
   }
+
+  /**
+   * Returns the unqiue ID of the rental.
+   * @return - Rental's ID.
+   */
+  public int getID() {
+    return this.id;
+  }
 }

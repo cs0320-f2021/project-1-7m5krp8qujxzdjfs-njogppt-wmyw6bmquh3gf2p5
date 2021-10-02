@@ -65,6 +65,21 @@ public class Users {
     return Integer.parseInt(this.age);
   }
 
+  public String getID() {
+    return this.userId;
+  }
+
+  public int getDimensionValue (int currentDepth) {
+    int dimension = currentDepth % 3;
+    if (dimension == 0) {
+      return this.getWeight();
+    } else if (dimension == 1) {
+      return this.getHeight();
+    } else {
+      return this.getAge();
+    }
+  }
+
 }
 
 

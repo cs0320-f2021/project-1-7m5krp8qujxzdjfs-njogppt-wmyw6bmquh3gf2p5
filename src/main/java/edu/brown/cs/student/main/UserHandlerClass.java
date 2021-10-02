@@ -34,7 +34,7 @@ public class UserHandlerClass {
    * @return sorted ascending list of users by age values
    */
   public List<Users> sortingUsersByAge(List<Users> userListForAge) {
-    Comparator<Users> sortingComparator = Comparator.comparing(Users::getHeight);
+    Comparator<Users> sortingComparator = Comparator.comparing(Users::getAge);
     userListForAge.sort(sortingComparator);
     return userListForAge;
   }
@@ -55,6 +55,8 @@ public class UserHandlerClass {
       return sortingUsersByAge(userListForSort);
     }
   }
+
+
 
 }
 

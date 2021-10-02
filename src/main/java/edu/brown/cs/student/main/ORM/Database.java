@@ -19,8 +19,8 @@ public class Database {
 
   /**
    * Initiates the database and loads in the file.
-   * @param filename - The file path to the database
-   * @throws SQLException - If an error occurs in any SQL query
+   * @param filename - The file path to the database.
+   * @throws SQLException - Thrown if an error occurs in any SQL query.
    */
   public Database(String filename) throws SQLException, ClassNotFoundException {
     Class.forName("org.sqlite.JDBC");
@@ -34,9 +34,9 @@ public class Database {
   /**
    * Inserts a given object into the connected database.
    * @param datum - The object being added in.
-   * @param <T> - The class of the object (users, rent, or reviews)
-   * @throws IllegalAccessException
-   * @throws SQLException
+   * @param <T> - The class of the object (Users, Rent, or Reviews).
+   * @throws IllegalAccessException - Thrown if there is a problem with the reflective access.
+   * @throws SQLException - Thrown if there is a problem with the SQL command.
    */
   public <T> void insert(T datum) throws IllegalAccessException, SQLException {
     try {
@@ -65,8 +65,8 @@ public class Database {
 
   /**
    * Helper method that returns the appropriate INSERT sql command.
-   * @param className - The table to insert into
-   * @return - The appropraite sql command.
+   * @param className - The table to insert into.
+   * @return - The appropriate sql command.
    * @throws IOException - Thrown when such a table does not exist.
    */
   private String checkClass(String className) throws IOException {
@@ -78,8 +78,48 @@ public class Database {
     }
   }
 
+  /**
+   * Deletes a given object from the connected database. Users are deleted via user_id,
+   * rents are deleted via id, and reviews are deleted via id.
+   * @param datum - The object to be deleted.
+   * @param <T> - The class of the object (Users, Reviews, Rent).
+   */
   public <T> void delete(T datum) {
+    try {
+      String table = datum.getClass().getSimpleName().toLowerCase();
+      String sql = checkDeleteBy(table);
+      PreparedStatement prep =
+          conn.prepareStatement(sql);
+      Field[] fields = datum.getClass().getDeclaredFields();
+      for (Field f : fields) {
+        f.setAccessible(true);
+        if (f.getName().equals("userId") && table.equals("users")) {
+          prep.setString(1, String.valueOf(f.get(datum)));
+        } else if (f.getName().equals("id")) {
+          prep.setInt(1, f.getInt(datum));
+        }
+      }
+      prep.addBatch();
+      prep.executeBatch();
+      prep.close();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+  }
 
+  /**
+   * Returns the appropriate SQL command for the given object.
+   * @param className - The table to delete from.
+   * @return - The SQL command for deletion.
+   * @throws IOException - Thrown if the given data type does not exist.
+   */
+  private String checkDeleteBy(String className) throws IOException {
+    switch (className) {
+      case "users": return "DELETE FROM users WHERE user_id=?";
+      case "rent": return "DELETE FROM rent WHERE id=?";
+      case "reviews": return "DELETE FROM reviews WHERE id=?";
+      default: throw new IOException("ERROR: This type of data is not in the database.");
+    }
   }
 
   public List<Users> where(String searchBy, String searchFor) {
