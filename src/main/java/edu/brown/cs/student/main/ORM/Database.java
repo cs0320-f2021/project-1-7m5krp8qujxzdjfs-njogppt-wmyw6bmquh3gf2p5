@@ -1,13 +1,21 @@
 package edu.brown.cs.student.main.ORM;
 
+import edu.brown.cs.student.main.dataTypes.DataTypes;
+import edu.brown.cs.student.main.dataTypes.Rent;
+import edu.brown.cs.student.main.dataTypes.Reviews;
 import edu.brown.cs.student.main.dataTypes.Users;
+
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,8 +50,7 @@ public class Database {
     try {
       String table = datum.getClass().getSimpleName().toLowerCase();
       String sql = this.checkClass(table);
-      PreparedStatement prep =
-          conn.prepareStatement(sql);
+      PreparedStatement prep = conn.prepareStatement(sql);
       Field[] fields = datum.getClass().getDeclaredFields();
       int cnt = 1;
       for (Field f : fields) {
@@ -88,8 +95,7 @@ public class Database {
     try {
       String table = datum.getClass().getSimpleName().toLowerCase();
       String sql = checkDeleteBy(table);
-      PreparedStatement prep =
-          conn.prepareStatement(sql);
+      PreparedStatement prep = conn.prepareStatement(sql);
       Field[] fields = datum.getClass().getDeclaredFields();
       for (Field f : fields) {
         f.setAccessible(true);
@@ -122,8 +128,68 @@ public class Database {
     }
   }
 
-  public List<Users> where(String searchBy, String searchFor) {
-    return null;
+  /**
+   * A method that searches the database and selects the desired objects.
+   * It then creates new instances of the selected objects and returns them in a list.
+   * @param dataType - The data type that will be made.
+   * @param searchBy - The attribute being searched by.
+   * @param searchFor - The value being searched for.
+   * @return - A list of the desired data type.
+   * @throws IOException - Thrown if the given data type doesn't exist.
+   * @throws SQLException - Thrown if the SQL query is incorrect.
+   */
+  public List<DataTypes> where(String dataType, String searchBy, String searchFor)
+      throws SQLException, IOException {
+    List<DataTypes> output = new ArrayList<>();
+    String sql = "SELECT * FROM " + dataType.toLowerCase() + " WHERE " + searchBy;
+    PreparedStatement prep = conn.prepareStatement(sql);
+    prep.setString(1, searchFor);
+    ResultSet selected = prep.executeQuery();
+    while (selected.next()) {
+      DataTypes datum = this.makeNewT(dataType, selected);
+      output.add(datum);
+    }
+    prep.close();
+    return output;
+  }
+
+  /**
+   * Helper that returns a blank instance of the required data type.
+   * @param dataType - The type of data being made.
+   * @param selected - The result set from the query.
+   * @return - An empty instance of the data type.
+   * @throws SQLException - Thrown if there is an issue getting something from the result set.
+   * @throws IOException - Thrown if the data type given doesn't exist.
+   */
+  public DataTypes makeNewT(String dataType, ResultSet selected) throws SQLException, IOException {
+    switch (dataType) {
+      case "Users":
+        String userID = selected.getString("user_id");
+        String weight = selected.getString("weight");
+        String bustSize = selected.getString("bust_size");
+        String height = selected.getString("height");
+        String age = selected.getString("age");
+        String bodyType = selected.getString("body_type");
+        String horoscope = selected.getString("horoscope");
+        return new Users(userID, weight, bustSize, height, age, bodyType, horoscope);
+      case "Rent":
+        int id = selected.getInt("id");
+        String userID2 = selected.getString("user_id");
+        String itemID = selected.getString("item_id");
+        String fit = selected.getString("fit");
+        String rating = selected.getString("rating");
+        String rentedFor = selected.getString("rented_for");
+        String category = selected.getString("category");
+        String size = selected.getString("size");
+        return new Rent(id, userID2, itemID, fit, rating, rentedFor, category, size);
+      case "Reviews":
+        int id2 = selected.getInt("id");
+        String reviewText = selected.getString("review_text");
+        String reviewSum = selected.getString("review_summary");
+        String reviewDate = selected.getString("review_date");
+        return new Reviews(id2, reviewText, reviewSum, reviewDate);
+      default: throw new IOException("ERROR: This data type is not present.");
+    }
   }
 
   public <T> void update(T toUpdate, String updateBy) {

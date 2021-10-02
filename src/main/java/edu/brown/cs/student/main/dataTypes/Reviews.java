@@ -3,7 +3,7 @@ package edu.brown.cs.student.main.dataTypes;
 /**
  * A class that stores review data.
  */
-public class Reviews {
+public class Reviews implements DataTypes {
 
   private int id;
   private String reviewText;
@@ -22,6 +22,11 @@ public class Reviews {
     this.reviewText = reviewText;
     this.reviewSummary = reviewSummary;
     this.reviewDate = reviewDate;
+  }
+
+  @Override
+  public String toString() {
+    return "Review data with id: " + this.id;
   }
 
   /**

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import edu.brown.cs.student.main.ORM.Database;
+import edu.brown.cs.student.main.dataTypes.DataTypes;
 import edu.brown.cs.student.main.dataTypes.Rent;
 import edu.brown.cs.student.main.dataTypes.Reviews;
 import edu.brown.cs.student.main.dataTypes.Users;
@@ -74,7 +75,6 @@ public final class Main {
           input = input.trim();
           String[] arguments = splitHelper(input);
           String command = arguments[0];
-          System.out.println(Arrays.toString(arguments));
           switch (command) {
             case "add": this.addHelper(arguments[1], arguments[2]);
             break;
@@ -108,12 +108,22 @@ public final class Main {
               database = new Database(arguments[1]);
               System.out.println("Database at " + arguments[1] + " loaded in.");
               break;
-            default:
+            case "insert":
+            case "delete":
               this.ormHelper(command, arguments, database);
               break;
+            case "select":
+              if (database != null) {
+                List<DataTypes> results = database.where(arguments[1], arguments[2], arguments[3]);
+                System.out.println(results);
+              } else {
+                throw new IOException("ERROR: There is no database connection.");
+              }
+            default:
+
           }
         } catch (Exception e) {
-          // e.printStackTrace();
+          e.printStackTrace();
           System.out.println("ERROR: We couldn't process your input");
         }
       }

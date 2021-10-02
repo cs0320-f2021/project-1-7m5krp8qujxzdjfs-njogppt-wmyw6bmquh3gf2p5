@@ -3,16 +3,16 @@ package edu.brown.cs.student.main.dataTypes;
 /**
  * A class that stores rent data.
  */
-public class Rent {
+public class Rent implements DataTypes {
 
-  private int id;
-  private String userId;
-  private String itemId;
-  private String fit;
-  private String rating;
-  private String rentedFor;
-  private String category;
-  private String size;
+  private final int id;
+  private final String userId;
+  private final String itemId;
+  private final String fit;
+  private final String rating;
+  private final String rentedFor;
+  private final String category;
+  private final String size;
 
   /**
    * The constructor for rent objects.
@@ -37,9 +37,14 @@ public class Rent {
     this.size = size;
   }
 
+  @Override
+  public String toString() {
+    return "Rental data with id: " + this.id;
+  }
+
   /**
-   * Returns the unqiue ID of the rental.
-   * @return - Rental's ID.
+   * Gets the id of the rental.
+   * @return - The unique id.
    */
   public int getID() {
     return this.id;
