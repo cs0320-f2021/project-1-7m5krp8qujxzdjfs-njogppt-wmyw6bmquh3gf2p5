@@ -110,6 +110,7 @@ public final class Main {
               break;
             case "insert":
             case "delete":
+            case "update":
               this.ormHelper(command, arguments, database);
               break;
             case "select":
@@ -252,7 +253,7 @@ public final class Main {
     try {
     /* for users provide user_id weight bust_size height age body_type
     and horoscope in that order */
-      if (arguments.length == 8) {
+      if (arguments.length == 8 || arguments.length == 10) {
         Users newUser = new Users(arguments[1], arguments[2], arguments[3], arguments[4],
             arguments[5], arguments[6], arguments[7]);
         switch (command) {
@@ -264,12 +265,19 @@ public final class Main {
             db.delete(newUser);
             System.out.println("User with user_id " + newUser.getID() + " deleted.");
             break;
+          case "update":
+            // add twp arguments to the above template giving what to update by then with what value
+            String updateBy = arguments[8];
+            String updateWith = arguments[9];
+            db.update(newUser, updateBy, updateWith);
+            System.out.println("User with user_id: " + newUser.getID() + " updated.");
+            break;
           default: throw new IOException("ERROR: The given command is not supported.");
         }
 
       /* for rent provide id user_id item_id fit rating rented_for category
       and size in that order. */
-      } else if (arguments.length == 9) {
+      } else if (arguments.length == 9 || arguments.length == 11) {
         Rent newRent = new Rent(Integer.parseInt(arguments[1]), arguments[2], arguments[3],
             arguments[4], arguments[5], arguments[6], arguments[7], arguments[8]);
         switch (command) {
@@ -279,15 +287,21 @@ public final class Main {
             break;
           case "delete":
             db.delete(newRent);
-            String id = String.valueOf(newRent.getID());
-            System.out.println("Rent data with id " + id + " deleted.");
+            System.out.println("Rent data with id " + newRent.getID() + " deleted.");
+            break;
+          case "update":
+            // add twp arguments to the above template giving what to update by then with what value
+            String updateBy = arguments[9];
+            String updateWith = arguments[10];
+            db.update(newRent, updateBy, updateWith);
+            System.out.println("Rent data with id: " + newRent.getID() + " updated.");
             break;
           default: throw new IOException("ERROR: The given command is not supported.");
         }
 
       /* for reviews provide id `review_text` `review_summary` and `review_date` in
       that order. ` delimits chunks of text. */
-      } else if (arguments.length == 5) {
+      } else if (arguments.length == 5 || arguments.length == 7) {
         String reviewText = arguments[2].replaceAll("`", "");
         String reviewSum = arguments[3].replaceAll("`", "");
         String reviewDate = arguments[4].replaceAll("`", "");
@@ -300,8 +314,14 @@ public final class Main {
             break;
           case "delete":
             db.delete(newReview);
-            String id = String.valueOf(newReview.getID());
-            System.out.println("User with user_id " + id + " deleted.");
+            System.out.println("User with user_id " + newReview.getID() + " deleted.");
+            break;
+          case "update":
+            // add twp arguments to the above template giving what to update by then with what value
+            String updateBy = arguments[5];
+            String updateWith = arguments[6];
+            db.update(newReview, updateBy, updateWith);
+            System.out.println("User with user_id: " + newReview.getID() + " updated.");
             break;
           default: throw new IOException("ERROR: The given command is not supported.");
         }

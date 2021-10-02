@@ -65,8 +65,8 @@ public class Users implements DataTypes {
     return Integer.parseInt(this.age);
   }
 
-  public String getID() {
-    return this.userId;
+  public int getID() {
+    return Integer.parseInt(this.userId);
   }
 
   @Override

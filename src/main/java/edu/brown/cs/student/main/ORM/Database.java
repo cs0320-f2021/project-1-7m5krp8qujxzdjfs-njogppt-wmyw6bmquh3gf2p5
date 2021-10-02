@@ -4,11 +4,8 @@ import edu.brown.cs.student.main.dataTypes.DataTypes;
 import edu.brown.cs.student.main.dataTypes.Rent;
 import edu.brown.cs.student.main.dataTypes.Reviews;
 import edu.brown.cs.student.main.dataTypes.Users;
-
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -192,8 +189,40 @@ public class Database {
     }
   }
 
-  public <T> void update(T toUpdate, String updateBy) {
+  public <T extends DataTypes> void update(T toUpdate, String updateBy, String updateWith) {
+    try {
+      String table = toUpdate.getClass().getSimpleName().toLowerCase();
+      String where = whereDatum(table);
+      String sql = "UPDATE " + table + " SET " + updateBy + "=?" + where;
+      PreparedStatement prep = conn.prepareStatement(sql);
+      prep.setString(1, updateWith);
+      if (table.equals("users")) {
+        prep.setString(2, String.valueOf(toUpdate.getID()));
+      } else {
+        prep.setInt(2, toUpdate.getID());
+      }
+      prep.executeUpdate();
+      prep.close();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+  }
 
+  /**
+   * Helper that returns the part of the SQL command that searches for a particular datum.
+   * @param table - The table we are searching in.
+   * @return - The WHERE part of the SQL command.
+   * @throws IOException - Thrown if the data type is not handled.
+   */
+  private String whereDatum(String table) throws IOException {
+    switch (table) {
+      case "users":
+        return " WHERE user_id=?";
+      case "rent":
+      case "reviews":
+        return " WHERE id=?";
+      default: throw new IOException("ERROR: The given data type is not present.");
+    }
   }
 
   public void sql(String command) {
