@@ -43,11 +43,33 @@ public class KDTree<V> {
     return newNode;
   }
 
-  public double euclidianDist(double x, double y, double z, double x2, double y2, double z2) {
+  // takes in two nodes of the tree and returns the euclidean distance between them
+  public double NodeDistance(Node<V> node1, Node<V> node2) {
+    return euclideanDist();
+  }
+
+  public double euclideanDist(double x, double y, double z, double x2, double y2, double z2) {
     double newX = (x - x2) * (x - x2);
     double newY = (y - y2) * (y - y2);
     double newZ = (z - z2) * (z - z2);
     return Math.sqrt(newX + newY + newZ);
+  }
+
+
+
+
+
+
+
+
+  public List<V> getKNearestNeighbors() {
+    ArrayList<V> kNearestNeighbors = new ArrayList<V>();
+
+
+
+
+
+    return kNearestNeighbors;
   }
 
 
