@@ -118,10 +118,17 @@ public final class Main {
                 List<DataTypes> results = database.where(arguments[1], arguments[2], arguments[3]);
                 System.out.println(results);
               } else {
-                throw new IOException("ERROR: There is no database connection.");
+                throw new RuntimeException("ERROR: There is no database connected.");
               }
-            default:
-
+              break;
+            case "sql":
+              if (database != null) {
+                database.sql(arguments[1]);
+              } else {
+                throw new RuntimeException("ERROR: There is not database connected.");
+              }
+              break;
+            default: throw new IOException("ERROR: The given command is not recognized.");
           }
         } catch (Exception e) {
           e.printStackTrace();

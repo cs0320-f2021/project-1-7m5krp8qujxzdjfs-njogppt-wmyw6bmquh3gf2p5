@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -146,6 +147,7 @@ public class Database {
       DataTypes datum = this.makeNewT(dataType, selected);
       output.add(datum);
     }
+    selected.close();
     prep.close();
     return output;
   }
@@ -225,8 +227,37 @@ public class Database {
     }
   }
 
+  /**
+   * Allows the user to run more complex SQL commands.
+   * @param command - The SQL command being run.
+   */
   public void sql(String command) {
-
+    try {
+      String c = command.replaceAll("`", "");
+      PreparedStatement prep = conn.prepareStatement(c);
+      if (prep.execute()) {
+        ResultSet results = prep.executeQuery();
+        ResultSetMetaData resData = results.getMetaData();
+        int columnCount = resData.getColumnCount();
+        while (results.next()) {
+          StringBuilder res = new StringBuilder();
+          for (int i = 1; i <= columnCount; i++) {
+            String toAdd = "";
+            if (i != columnCount) {
+              toAdd = results.getString(i) + ", ";
+            } else {
+              toAdd = results.getString(i);
+            }
+            res.append(toAdd);
+          }
+          System.out.println(res);
+        }
+        results.close();
+      }
+      prep.close();
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
   }
 
 }
