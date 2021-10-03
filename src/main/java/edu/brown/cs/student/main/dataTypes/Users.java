@@ -1,5 +1,6 @@
 package edu.brown.cs.student.main.dataTypes;
 
+<<<<<<< HEAD
 
 import edu.brown.cs.student.main.KDTree.NodeValue;
 
@@ -7,6 +8,12 @@ import edu.brown.cs.student.main.KDTree.NodeValue;
  * A class that stores user info.
  */
 public class Users implements NodeValue {
+=======
+/**
+ * A class that stores user info.
+ */
+public class Users implements DataTypes {
+>>>>>>> 5a59f38db467d521fc5e9cf3cdcfeebc0d3bd7b2
 
   private String userId;
   private String weight;
@@ -37,7 +44,6 @@ public class Users implements NodeValue {
     this.horoscope = horoscope;
   }
 
-
   /**
    * Gets the weight of the user.
    * @return - The user's weight
@@ -67,11 +73,20 @@ public class Users implements NodeValue {
     return Integer.parseInt(this.age);
   }
 
-  public String getID() {
-    return this.userId;
+  /**
+   * Returns the id of the user.
+   * @return - The user's id.
+   */
+  public int getID() {
+    return Integer.parseInt(this.userId);
   }
 
-  public int getDimensionValue (int currentDepth) {
+  @Override
+  public String toString() {
+    return "User with id: " + this.userId;
+  }
+
+  public int getDimensionValue(int currentDepth) {
     int dimension = currentDepth % 3;
     if (dimension == 0) {
       return this.getWeight();
@@ -81,9 +96,4 @@ public class Users implements NodeValue {
       return this.getAge();
     }
   }
-
 }
-
-
-
-

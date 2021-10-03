@@ -43,11 +43,72 @@ public class KDTree<V> {
     return newNode;
   }
 
-  public double euclidianDist(double x, double y, double z, double x2, double y2, double z2) {
+  public Node<V> nearestNeighbor(Node<V> root, Node<V> target, int depth) {
+    if (root == null) return null;
+
+    Node<V> nextBranch = null;
+    Node<V> otherBranch = null;
+    if (target[depth % _k] < root[depth % _k]) {
+      nextBranch = root.getLesser();
+      otherBranch = root.getGreater();
+    } else {
+      nextBranch = root.getGreater();
+      otherBranch = root.getLesser();
+    }
+
+    Node<V> temp = this.nearestNeighbor(nextBranch, target, depth + 1);
+    Node<V> best = null;
+    if (this.NodeDistance(target, temp) < this.NodeDistance(target, root)) {
+      best = temp;
+    } else {
+      best = root;
+    }
+
+    double radius = this.NodeDistance(target, best);
+    double dist = target[depth % _k] - root[depth % _k];
+
+    if (radius >= dist) {
+      temp = this.nearestNeighbor(otherBranch, target, depth + 1);
+      if (this.NodeDistance(target, temp) < this.NodeDistance(target, best)) {
+        best = temp;
+      } else {
+        best = best;
+      }
+    }
+
+    return best;
+  }
+
+  // takes in two nodes of the tree and returns the euclidean distance between them
+  public double NodeDistance(Node<V> node1, Node<V> node2) {
+    V key1 = node1.getKey();
+    V key2 = node2.getKey();
+
+    return euclideanDist();
+  }
+
+  public double euclideanDist(double x, double y, double z, double x2, double y2, double z2) {
     double newX = (x - x2) * (x - x2);
     double newY = (y - y2) * (y - y2);
     double newZ = (z - z2) * (z - z2);
     return Math.sqrt(newX + newY + newZ);
+  }
+
+
+
+
+
+
+
+
+  public List<V> getKNearestNeighbors() {
+    ArrayList<V> kNearestNeighbors = new ArrayList<V>();
+
+
+
+
+
+    return kNearestNeighbors;
   }
 
 
