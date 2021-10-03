@@ -1,10 +1,12 @@
 package edu.brown.cs.student.main.dataTypes;
 
 
+import edu.brown.cs.student.main.KDTree.NodeValue;
+
 /**
  * A class that stores user info.
  */
-public class Users {
+public class Users implements NodeValue {
 
   private String userId;
   private String weight;
