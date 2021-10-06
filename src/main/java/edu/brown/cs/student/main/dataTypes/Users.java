@@ -1,9 +1,19 @@
 package edu.brown.cs.student.main.dataTypes;
 
+<<<<<<< HEAD
+
+import edu.brown.cs.student.main.KDTree.NodeValue;
+
+/**
+ * A class that stores user info.
+ */
+public class Users implements NodeValue {
+=======
 /**
  * A class that stores user info.
  */
 public class Users implements DataTypes {
+>>>>>>> 5a59f38db467d521fc5e9cf3cdcfeebc0d3bd7b2
 
   private String userId;
   private String weight;
@@ -38,7 +48,7 @@ public class Users implements DataTypes {
    * Gets the weight of the user.
    * @return - The user's weight
    */
-  public int getWeight() {
+  public int getSecondAttribute() {
     String[] w = this.weight.split("l");
     int lbs = Integer.parseInt(w[0]);
     return lbs;
@@ -48,7 +58,7 @@ public class Users implements DataTypes {
    * Gets the height in inches.
    * @return - The height of a user in inches.
    */
-  public int getHeight() {
+  public int getFourthAttribute() {
     String[] h = this.height.split("'|\"");
     int ft = Integer.parseInt(h[0]);
     int inches = Integer.parseInt(h[1]);
@@ -59,7 +69,7 @@ public class Users implements DataTypes {
    * Gets the age of the user.
    * @return - The user's age.
    */
-  public int getAge() {
+  public int getFifthAttribute() {
     return Integer.parseInt(this.age);
   }
 
@@ -67,7 +77,7 @@ public class Users implements DataTypes {
    * Returns the id of the user.
    * @return - The user's id.
    */
-  public int getID() {
+  public int getFirstAttribute() {
     return Integer.parseInt(this.userId);
   }
 
@@ -79,11 +89,11 @@ public class Users implements DataTypes {
   public int getDimensionValue(int currentDepth) {
     int dimension = currentDepth % 3;
     if (dimension == 0) {
-      return this.getWeight();
+      return this.getSecondAttribute();
     } else if (dimension == 1) {
-      return this.getHeight();
+      return this.getFourthAttribute();
     } else {
-      return this.getAge();
+      return this.getFifthAttribute();
     }
   }
 }
