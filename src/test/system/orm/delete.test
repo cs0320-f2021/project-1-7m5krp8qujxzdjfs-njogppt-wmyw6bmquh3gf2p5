@@ -1,0 +1,9 @@
+ARGS
+
+INPUT
+database data/project-1/emptyEditable2.sqlite3
+delete 2 147lbs 32b 5'7" 22 athletic Aquarius
+OUTPUT
+Database at data/project-1/emptyEditable2.sqlite3 loaded in.
+User with user_id 2 deleted.
+END

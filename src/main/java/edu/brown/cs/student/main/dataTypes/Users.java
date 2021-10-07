@@ -1,19 +1,11 @@
 package edu.brown.cs.student.main.dataTypes;
 
-<<<<<<< HEAD
-
 import edu.brown.cs.student.main.KDTree.NodeValue;
 
 /**
  * A class that stores user info.
  */
-public class Users implements NodeValue {
-=======
-/**
- * A class that stores user info.
- */
-public class Users implements DataTypes {
->>>>>>> 5a59f38db467d521fc5e9cf3cdcfeebc0d3bd7b2
+public class Users implements DataTypes, NodeValue {
 
   private String userId;
   private String weight;
@@ -95,5 +87,10 @@ public class Users implements DataTypes {
     } else {
       return this.getFifthAttribute();
     }
+  }
+
+  @Override
+  public int getID() {
+    return Integer.parseInt(this.userId);
   }
 }
