@@ -1,0 +1,9 @@
+ARGS
+
+INPUT
+database data/project-1/emptyEditable2.sqlite3
+select Users horoscope=? Leo
+OUTPUT
+Database at data/project-1/emptyEditable2.sqlite3 loaded in.
+([User with id: 1], [User with id: 3])
+END

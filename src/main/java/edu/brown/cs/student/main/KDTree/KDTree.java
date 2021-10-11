@@ -1,7 +1,7 @@
 package edu.brown.cs.student.main.KDTree;
 
-import edu.brown.cs.student.main.UserHandlerClass;
-import java.lang.reflect.Array;
+import edu.brown.cs.student.main.NodeValueHandlerClass;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,22 +14,22 @@ public class KDTree<V> {
     this._k =  k;
   }
 
-  public Node<V> getMidpointToNode(int depth, List<V> userList) {
-    UserHandlerClass userSorter = new UserHandlerClass();
-    ArrayList<V> sortedUserList = userSorter.sortedByDimension(depth, userList);
+  public Node<NodeValue> getMidpointToNode(int depth, List<NodeValue> userList) {
+    NodeValueHandlerClass userSorter = new NodeValueHandlerClass();
+    List<NodeValue> sortedUserList = userSorter.sortedByDimension(depth, userList);
     int midPointIndex = (sortedUserList.size() / 2) - 1;
 //    User userToNode = sortedUserList.get(midPointIndex);
 
-    List<V> leftList = sortedUserList.subList(0, midPointIndex);
-    List<V> rightList = sortedUserList.subList(midPointIndex + 1, sortedUserList.size());
+    List<NodeValue> leftList = sortedUserList.subList(0, midPointIndex);
+    List<NodeValue> rightList = sortedUserList.subList(midPointIndex + 1, sortedUserList.size());
 
     return this.createNode(sortedUserList.get(midPointIndex), this.getMidpointToNode(depth + 1,
         leftList), this.getMidpointToNode(depth + 1, rightList), depth);
   }
 
 
-  public Node<V> createNode(V val, Node<V> left, Node<V> right, int depth) {
-    Node<V> newNode = new Node<>(val, depth, _k);
+  public Node<NodeValue> createNode(NodeValue val, Node<NodeValue> left, Node<NodeValue> right, int depth) {
+    Node<NodeValue> newNode = new Node<>(val, depth, _k);
 
     if (_root == null) {
       _root = newNode;

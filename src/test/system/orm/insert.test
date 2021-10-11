@@ -1,0 +1,13 @@
+ARGS
+
+INPUT
+database data/project-1/emptyEditable2.sqlite3
+insert 4 150lbs 28b 5'1" 20 athletic Gemini
+insert 1 `The pants didn't look good at all!` `Terrible` `August 21, 2021`
+insert 1 fit 4 1 2 work pants 12
+OUTPUT
+Database at data/project-1/emptyEditable2.sqlite3 loaded in.
+New user data added.
+New review data added.
+New rent data added.
+END
