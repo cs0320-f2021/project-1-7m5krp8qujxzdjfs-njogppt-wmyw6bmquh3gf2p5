@@ -1,7 +1,5 @@
 package edu.brown.cs.student.main.KDTree;
 
-import edu.brown.cs.student.main.NodeValueHandlerClass;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -9,78 +7,53 @@ import java.util.List;
 public class KDTree<V> {
   
   private int _dimensions;
-  private Node<Coordinate<V>> _root;
+  private Node<User<V>> _root;
 
 //  private Node<V> _root; // root node
 //  private Integer _k; // the dimensions of the space (ex. 3-dimensional space)
 
-  public KDTree(int dimensions, List<Coordinate<V>> coordinates) {
+  public KDTree(int dimensions, List<User<V>> users) {
     this._dimensions = dimensions;
-    this._root = createKDTree(new ArrayList<>(coordinates));
+    this._root = generateOnStart(new ArrayList<>(users));
   }
   
-//  public KDTree(Integer k) {
-//    this._k =  k;
-//  }
+//  public KDTree(Integer k) { this._k =  k; }
+
+  public Node<User<V>> getRoot() { return _root; }
   
-  public Node<Coordinate<V>> createKDTree(List<Coordinate<V>> coordinates) {
-    return createNextLayer(1, coordinates);
-  }
+  public Node<User<V>> generateOnStart(List<User<V>> users) { return newLevel(users, 1); }
   
-  public Node<Coordinate<V>> createNextLayer(int currentDim, List<Coordinate<V>> remainingCoordinates) {
-    if (remainingCoordinates.size() == 0) {
-      return new Node<>(null, null, null);
-    } else {
-      
-      Comparator<Coordinate<V>> byDimension = Comparator.comparingDouble(coordinate -> coordinate.getCoordinateVal(currentDim));
+  public Node<User<V>> newLevel(List<User<V>> usersLeft, int dim) {
+    if (usersLeft.size() != 0) {
+      int indexMid = usersLeft.size() / 2;
+      Comparator<User<V>> byDimension = Comparator.comparingDouble(users -> users.getUserVal(dim));
+      usersLeft.sort(byDimension);
 
-      remainingCoordinates.sort(byDimension);
+      User<V> medianUser = usersLeft.get(indexMid); // find median user, users lesser, users greater than median
 
-      int middleIndex = remainingCoordinates.size() / 2;
-
-      // find median coordinate, coordinates lesser, coordinates greater than median
-      Coordinate<V> medianCoordinate = remainingCoordinates.get(middleIndex);
-
-
-
-//      List<List<Coordinate<V>>> splitResult = Utils.splitList(remainingCoordinates, middleIndex);
-      List<Coordinate<V>> preSplit = new ArrayList<>();
-      List<Coordinate<V>> postSplit = new ArrayList<>();
-      int index = 0;
-      for (Coordinate<V> element : remainingCoordinates) {
-        if (index < middleIndex) { preSplit.add(element); }
-        else if (index > middleIndex) { postSplit.add(element); }
-        index++;
+//      List<List<User<V>>> splitResult = Utils.splitList(remainingUsers, middleIndex);
+      int i = 0;
+      List<User<V>> first = new ArrayList<>();
+      List<User<V>> second = new ArrayList<>();
+      for (User<V> element : usersLeft) {
+        if (i < indexMid) { first.add(element); }
+        else if (i > indexMid) { second.add(element); }
+        i++;
       }
-      List<List<Coordinate<V>>> splitResult = new ArrayList<>();
-      splitResult.add(preSplit);
-      splitResult.add(postSplit);
+      List<List<User<V>>> finalResult = new ArrayList<>();
+      finalResult.add(first);
+      finalResult.add(second);
 
-
-
-      List<Coordinate<V>> lesserCoordinates = splitResult.get(0);
-      List<Coordinate<V>> greaterCoordinates = splitResult.get(1);
+      List<User<V>> lesserUsers = finalResult.get(0);
+      List<User<V>> greaterUsers = finalResult.get(1);
 
       // calculate next dimension
-      int nextDimension;
-      if (currentDim + 1 > _dimensions) {
-        nextDimension = 1;
-      } else {
-        nextDimension = currentDim + 1;
-      }
+      int dimNext;
+      if (dim + 1 > _dimensions) { dimNext = 1; }
+      else { dimNext = dim + 1; }
 
-      return new Node<>(
-          // value
-          medianCoordinate,
-          // recursive call to fill left subtree
-          createNextLayer(nextDimension, lesserCoordinates),
-          // recursive call to fill right subtree
-          createNextLayer(nextDimension, greaterCoordinates));
-    }
-  }
-  
-  public Node<Coordinate<V>> getRoot() {
-    return _root;
+      return new Node<>(medianUser, newLevel(lesserUsers, dimNext), newLevel(greaterUsers, dimNext));
+    } else { return new Node<>(null, null, null); }
   }
 
 //  public Node<NodeValue> getMidpointToNode(int depth, List<NodeValue> userList) {
@@ -100,9 +73,7 @@ public class KDTree<V> {
 //  public Node<NodeValue> createNode(NodeValue val, Node<NodeValue> left, Node<NodeValue> right, int depth) {
 //    Node<NodeValue> newNode = new Node<>(val, depth, _k);
 //
-//    if (_root == null) {
-//      _root = newNode;
-//    }
+//    if (_root == null) { _root = newNode; }
 //
 //    newNode.setLesser(left);
 //    newNode.setGreater(right);
