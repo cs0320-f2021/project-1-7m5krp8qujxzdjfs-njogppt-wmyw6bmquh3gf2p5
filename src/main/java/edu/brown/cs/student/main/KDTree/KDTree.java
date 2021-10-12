@@ -11,16 +11,14 @@ public class KDTree<V> {
 
   public KDTree(int dimensions, List<NodeValue<V>> nodeValues) {
     this._dimensions = dimensions;
-    this._root = generateOnStart(new ArrayList<>(nodeValues));
+    this._root = this.generateOnStart(new ArrayList<>(nodeValues), 1);
   }
   
 //  public KDTree(Integer k) { this._k =  k; }
 
   public Node<NodeValue<V>> getRoot() { return _root; }
   
-  public Node<NodeValue<V>> generateOnStart(List<NodeValue<V>> nodeValues) { return newLevel(nodeValues, 1); }
-  
-  public Node<NodeValue<V>> newLevel(List<NodeValue<V>> nodeValuesLeft, int dim) {
+  public Node<NodeValue<V>> generateOnStart(List<NodeValue<V>> nodeValuesLeft, int dim) {
     if (nodeValuesLeft.size() != 0) {
       int indexMid = nodeValuesLeft.size() / 2;
       Comparator<NodeValue<V>> byDimension = Comparator.comparingDouble(nodeValues -> nodeValues.getSingleNodeValue(dim));
@@ -49,7 +47,7 @@ public class KDTree<V> {
       if (dim + 1 > _dimensions) { dimNext = 1; }
       else { dimNext = dim + 1; }
 
-      return new Node<>(medianNodeValues, newLevel(lesserNodeValues, dimNext), newLevel(greaterNodeValues, dimNext));
+      return new Node<>(medianNodeValues, generateOnStart(lesserNodeValues, dimNext), generateOnStart(greaterNodeValues, dimNext));
     } else { return new Node<>(null, null, null); }
   }
 
