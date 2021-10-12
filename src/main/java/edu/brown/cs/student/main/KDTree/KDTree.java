@@ -10,7 +10,7 @@ public class KDTree<V> {
   private final int _dimensions;
   private final Node<Coordinate<V>> _root;
 
-  private Node<V> _root; // root node
+  private Node<V> _base; // root node
   private Integer _k; // the dimensions of the space (ex. 3-dimensional space)
 
   public KDTree(int dimensions, List<Coordinate<V>> coordinates) {
