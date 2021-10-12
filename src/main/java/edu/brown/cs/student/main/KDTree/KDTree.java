@@ -23,7 +23,7 @@ public class KDTree<V> {
   public Node<NodeValue<V>> newLevel(List<NodeValue<V>> nodeValuesLeft, int dim) {
     if (nodeValuesLeft.size() != 0) {
       int indexMid = nodeValuesLeft.size() / 2;
-      Comparator<NodeValue<V>> byDimension = Comparator.comparingDouble(nodeValues -> nodeValues.getNodeValueVal(dim));
+      Comparator<NodeValue<V>> byDimension = Comparator.comparingDouble(nodeValues -> nodeValues.getSingleNodeValue(dim));
       nodeValuesLeft.sort(byDimension);
 
       NodeValue<V> medianNodeValues = nodeValuesLeft.get(indexMid); // find median nodeValue, nodeValues lesser, nodeValues greater than median
