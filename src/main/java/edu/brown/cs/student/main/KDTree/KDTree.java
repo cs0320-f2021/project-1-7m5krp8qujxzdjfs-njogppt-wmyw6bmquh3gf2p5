@@ -40,7 +40,23 @@ public class KDTree<V> {
 
       // find median coordinate, coordinates lesser, coordinates greater than median
       Coordinate<V> medianCoordinate = remainingCoordinates.get(middleIndex);
-      List<List<Coordinate<V>>> splitResult = Utils.splitList(remainingCoordinates, middleIndex);
+
+
+
+//      List<List<Coordinate<V>>> splitResult = Utils.splitList(remainingCoordinates, middleIndex);
+      List<Coordinate<V>> preSplit = new ArrayList<>();
+      List<Coordinate<V>> postSplit = new ArrayList<>();
+      int index = 0;
+      for (Coordinate<V> element : remainingCoordinates) {
+        if (index < middleIndex) { preSplit.add(element); }
+        else if (index > middleIndex) { postSplit.add(element); }
+        index++;
+      }
+      List<List<Coordinate<V>>> splitResult = new ArrayList<>();
+      splitResult.add(preSplit);
+      splitResult.add(postSplit);
+
+
 
       List<Coordinate<V>> lesserCoordinates = splitResult.get(0);
       List<Coordinate<V>> greaterCoordinates = splitResult.get(1);
