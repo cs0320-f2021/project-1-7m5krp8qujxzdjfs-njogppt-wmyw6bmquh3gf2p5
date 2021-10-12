@@ -3,7 +3,7 @@ package edu.brown.cs.student.main.KDTree;
 import java.util.List;
 
 /** Interface of a Coordinate with a specified type ID.
- @param <T> Any type for the ID of the coordinate that is specified
+ @param <V> Any type for the ID of the coordinate that is specified
  when constructing a Coordinate.
  */
 public interface Coordinate<V> {
