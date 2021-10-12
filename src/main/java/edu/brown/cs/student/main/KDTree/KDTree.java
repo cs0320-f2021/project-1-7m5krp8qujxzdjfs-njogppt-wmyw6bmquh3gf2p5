@@ -46,7 +46,7 @@ public class KDTree<V> {
 
       // calculate next dimension
       int nextDimension;
-      if (currentDim + 1 > dimensions) {
+      if (currentDim + 1 > _dimensions) {
         nextDimension = 1;
       } else {
         nextDimension = currentDim + 1;
