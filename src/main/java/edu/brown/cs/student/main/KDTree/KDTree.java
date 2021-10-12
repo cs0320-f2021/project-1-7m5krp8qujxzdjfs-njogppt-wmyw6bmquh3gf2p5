@@ -6,12 +6,64 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KDTree<V> {
+  
+  private final int _dimensions;
+  private final Node<Coordinate<V>> _root;
 
-  private Node<V> _root; // root node
+  private Node<V> _base; // root node
   private Integer _k; // the dimensions of the space (ex. 3-dimensional space)
 
+  public KDTree(int dimensions, List<Coordinate<V>> coordinates) {
+    this._dimensions = dimensions;
+    this._root = createKDTree(new ArrayList<>(coordinates));
+  }
+  
   public KDTree(Integer k) {
     this._k =  k;
+  }
+  
+  public Node<Coordinate<V>> createKDTree(List<Coordinate<V>> coordinates) {
+    return createNextLayer(1, coordinates);
+  }
+  
+  public Node<Coordinate<V>> createNextLayer(int currentDim, List<Coordinate<V>> remainingCoordinates) {
+    if (remainingCoordinates.size() == 0) {
+      return new Node<>(null, null, null);
+    } else {
+      
+      Comparator<Coordinate<V>> byDimension = Comparator.comparingDouble(coordinate -> coordinate.getCoordinateVal(currentDim));
+
+      remainingCoordinates.sort(byDimension);
+
+      int middleIndex = remainingCoordinates.size() / 2;
+
+      // find median coordinate, coordinates lesser, coordinates greater than median
+      Coordinate<V> medianCoordinate = remainingCoordinates.get(middleIndex);
+      List<List<Coordinate<V>>> splitResult = Utils.splitList(remainingCoordinates, middleIndex);
+
+      List<Coordinate<V>> lesserCoordinates = splitResult.get(0);
+      List<Coordinate<V>> greaterCoordinates = splitResult.get(1);
+
+      // calculate next dimension
+      int nextDimension;
+      if (currentDim + 1 > dimensions) {
+        nextDimension = 1;
+      } else {
+        nextDimension = currentDim + 1;
+      }
+
+      return new Node<>(
+          // value
+          medianCoordinate,
+          // recursive call to fill left subtree
+          createNextLayer(nextDimension, lesserCoordinates),
+          // recursive call to fill right subtree
+          createNextLayer(nextDimension, greaterCoordinates));
+    }
+  }
+  
+  public Node<Coordinate<V>> getRoot() {
+    return _root;
   }
 
   public Node<NodeValue> getMidpointToNode(int depth, List<NodeValue> userList) {
