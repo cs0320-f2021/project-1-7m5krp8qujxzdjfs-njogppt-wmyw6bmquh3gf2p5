@@ -42,6 +42,7 @@ public class Rent implements DataTypes {
     return "Rental data with id: " + this.id;
   }
 
+  @Override
   public int getID() {
     return this.id;
   }
