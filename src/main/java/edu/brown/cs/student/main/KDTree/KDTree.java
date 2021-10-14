@@ -4,52 +4,48 @@ import java.util.ArrayList; import java.util.Comparator; import java.util.List;
 
 public class KDTree<V> {
   
-  private int _dimensions; // the dimensions of the space (ex. 3-dimensional space)
-//  private Integer _k;
-  private Node<NodeValue<V>> _root; // root node
+    private int _k; // the dimensions of the space (ex. 3-dimensional space)
+//  private Integer _dimension;
+    private Node<NodeValue<V>> _root; // root node
 //  private Node<V> _root;
 
-  public KDTree(int dimensions, List<NodeValue<V>> nodeValues) {
-    this._dimensions = dimensions;
-    this._root = this.generateOnStart(new ArrayList<>(nodeValues), 1);
-  }
+    public KDTree(int dimensions, List<NodeValue<V>> nodeValues) {
+      this._k = dimensions;
+      this._root = this.generateOnStart(new ArrayList<>(nodeValues), 1);
+    }
   
-//  public KDTree(Integer k) { this._k =  k; }
+//    public KDTree(Integer k) { this._k =  k; }
 
-  public Node<NodeValue<V>> getRoot() { return _root; }
+    public Node<NodeValue<V>> getRoot() { return _root; }
   
-  public Node<NodeValue<V>> generateOnStart(List<NodeValue<V>> nodeValuesLeft, int dim) {
-    if (nodeValuesLeft.size() != 0) {
-      int indexMid = nodeValuesLeft.size() / 2;
-      Comparator<NodeValue<V>> byDimension = Comparator.comparingDouble(nodeValues -> nodeValues.getSingleNodeValue(dim));
-      nodeValuesLeft.sort(byDimension);
+    public Node<NodeValue<V>> generateOnStart(List<NodeValue<V>> nodeValuesLeft, int dim) {
+      if (nodeValuesLeft.size() != 0) {
+        int indexMid = nodeValuesLeft.size() / 2;
+        Comparator<NodeValue<V>> byDimension = Comparator.comparingDouble(nodeValues -> nodeValues.getSingleNodeValue(dim));
+        nodeValuesLeft.sort(byDimension);
+        NodeValue<V> medianNodeValues = nodeValuesLeft.get(indexMid); // find median nodeValue, nodeValues lesser, nodeValues greater than median
 
-      NodeValue<V> medianNodeValues = nodeValuesLeft.get(indexMid); // find median nodeValue, nodeValues lesser, nodeValues greater than median
+        int i = 0;
+        List<NodeValue<V>> first = new ArrayList<>();
+        List<NodeValue<V>> second = new ArrayList<>();
+        for (NodeValue<V> element : nodeValuesLeft) {
+          if (i < indexMid) { first.add(element); }
+          else if (i > indexMid) { second.add(element); }
+          i++;
+        } List<List<NodeValue<V>>> finalResult = new ArrayList<>();
+        finalResult.add(first);
+        finalResult.add(second);
 
-//      List<List<NodeValue<V>>> splitResult = Utils.splitList(remainingNodeValues, middleIndex);
-      int i = 0;
-      List<NodeValue<V>> first = new ArrayList<>();
-      List<NodeValue<V>> second = new ArrayList<>();
-      for (NodeValue<V> element : nodeValuesLeft) {
-        if (i < indexMid) { first.add(element); }
-        else if (i > indexMid) { second.add(element); }
-        i++;
-      }
-      List<List<NodeValue<V>>> finalResult = new ArrayList<>();
-      finalResult.add(first);
-      finalResult.add(second);
+        List<NodeValue<V>> lesserNodeValues = finalResult.get(0);
+        List<NodeValue<V>> greaterNodeValues = finalResult.get(1);
 
-      List<NodeValue<V>> lesserNodeValues = finalResult.get(0);
-      List<NodeValue<V>> greaterNodeValues = finalResult.get(1);
+        int dimNext; // calculate next dimension
+        if (dim + 1 > _k) { dimNext = 1; }
+        else { dimNext = dim + 1; }
 
-      // calculate next dimension
-      int dimNext;
-      if (dim + 1 > _dimensions) { dimNext = 1; }
-      else { dimNext = dim + 1; }
-
-      return new Node<>(medianNodeValues, generateOnStart(lesserNodeValues, dimNext), generateOnStart(greaterNodeValues, dimNext));
-    } else { return new Node<>(null, null, null); }
-  }
+        return new Node<>(medianNodeValues, generateOnStart(lesserNodeValues, dimNext), generateOnStart(greaterNodeValues, dimNext));
+      } else { return new Node<>(null, null, null); }
+    }
 
 //  public Node<NodeValue> getMidpointToNode(int depth, List<NodeValue> nodeValueList) {
 //    NodeValueHandlerClass nodeValueSorter = new NodeValueHandlerClass();
