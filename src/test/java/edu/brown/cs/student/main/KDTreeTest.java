@@ -2,72 +2,35 @@ package edu.brown.cs.student.main;
 
 import static org.junit.Assert.assertEquals;
 
+import edu.brown.cs.student.main.KDTree.KDTree;
+import edu.brown.cs.student.main.KDTree.Node;
+import edu.brown.cs.student.main.KDTree.NodeValue;
+import edu.brown.cs.student.main.KDTree.TestObject;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class KDTreeTest {
 
   @Test
-  public void testAddition() {
-    MathBot matherator9000 = new MathBot();
-    double output = matherator9000.add(10.5, 3);
-    assertEquals(13.5, output, 0.01);
-  }
+  public void makeKDTree() {
+    NodeValue<Integer> one = new TestObject(1, 4.0, 7.0, 4.0);
+    NodeValue<Integer> two = new TestObject(2, 7.0, 1.0, 3.0);
+    NodeValue<Integer> three = new TestObject(3, 2.0, 9.0, 4.0);
 
-  @Test
-  public void testLargerNumbers() {
-    MathBot matherator9001 = new MathBot();
-    double output = matherator9001.add(100000, 200303);
-    assertEquals(300303, output, 0.01);
-  }
+    ArrayList<NodeValue<Integer>> list = new ArrayList<>();
+    list.add(one);
+    list.add(two);
+    list.add(three);
 
-  @Test
-  public void testSubtraction() {
-    MathBot matherator9002 = new MathBot();
-    double output = matherator9002.subtract(18, 17);
-    assertEquals(1, output, 0.01);
-  }
+    KDTree kdt = new KDTree(3, list);
 
-  // TODO: add more unit tests of your own
+    NodeValue<Integer> target = new TestObject(999, 7.0, 1.0, 3.1);
+    List<NodeValue<Integer>> result = kdt.getKNN(1, target);
 
-  @Test
-  public void testZerosAdd() {
-    MathBot matherator9003 = new MathBot();
-    double output = matherator9003.add(5, 0);
-    assertEquals(5, output, 0.01);
-  }
+    assertEquals(7.0, result.get(0).getSingleNodeValue(1), .01);
 
-  @Test
-  public void testZerosSub() {
-    MathBot matherator9004 = new MathBot();
-    double output = matherator9004.subtract(0, 5);
-    assertEquals(-5, output, 0.01);
-  }
-
-  @Test
-  public void testDecimalsAdd() {
-    MathBot matherator9005 = new MathBot();
-    double output = matherator9005.add(0.26, 23.5);
-    assertEquals(23.76, output, 0.01);
-  }
-
-  @Test
-  public void testDecimalsSub() {
-    MathBot matherator9006 = new MathBot();
-    double output = matherator9006.subtract(43.750, 3.6457);
-    assertEquals(40.1043, output, 0.01);
-  }
-
-  @Test
-  public void testNegativesAdd() {
-    MathBot matherator9007 = new MathBot();
-    double output = matherator9007.add(-5, -2);
-    assertEquals(-7, output, 0.01);
-  }
-
-  @Test
-  public void testNegativesSub() {
-    MathBot matherator9008 = new MathBot();
-    double output = matherator9008.subtract(-6, -3);
-    assertEquals(-3, output, 0.01);
+//    assertEquals(13.5, output, 0.01);
   }
 }
