@@ -29,10 +29,7 @@ public class Reviews implements DataTypes {
     return "Review data with id: " + this.id;
   }
 
-  /**
-   * Returns the unique ID of the review.
-   * @return - Review's ID.
-   */
+  @Override
   public int getID() {
     return this.id;
   }
