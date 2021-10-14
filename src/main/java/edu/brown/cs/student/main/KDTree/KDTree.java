@@ -55,19 +55,19 @@ public class KDTree<V> {
      */
     public List<NodeValue<V>> getKNN(int k, NodeValue<V> targetPoint, Boolean excludeTarget) {
         if (excludeTarget) { k++; } // this is to account for the fact that the neighbors will exclude the target star
-        Comparator<KeyDistance<NodeValue<V>>> byDistance = Comparator.comparing(KeyDistance::getDistance);
+        Comparator<Map<NodeValue<V>>> byDistance = Comparator.comparing(Map::getDistance);
 
-        Comparator<KeyDistance<NodeValue<V>>> byReverseDistance = Comparator.comparing(keyDist -> -1 * keyDist.getDistance());
-        PriorityQueue<KeyDistance<NodeValue<V>>> kNearestNeighborsQueue = new PriorityQueue<>(byDistance);
+        Comparator<Map<NodeValue<V>>> byReverseDistance = Comparator.comparing(keyDist -> -1 * keyDist.getDistance());
+        PriorityQueue<Map<NodeValue<V>>> kNearestNeighborsQueue = new PriorityQueue<>(byDistance);
         // maintaining a reverse ordered PriorityQueue to facilitate ease of peeking maximum known neighbor distance
-        PriorityQueue<KeyDistance<NodeValue<V>>> kNearestNeighborsReverse = new PriorityQueue<>(byReverseDistance);
+        PriorityQueue<Map<NodeValue<V>>> kNearestNeighborsReverse = new PriorityQueue<>(byReverseDistance);
 
         this.searchAlgorithm(_root, k, targetPoint, kNearestNeighborsQueue, kNearestNeighborsReverse, 1); // the big boi
 
         List<NodeValue<V>> returnNeighbors = new ArrayList<>();
         if (excludeTarget) { k--; } // reset k to account for previous offset
         while (returnNeighbors.size() < k) {
-          KeyDistance<NodeValue<V>> curr = kNearestNeighborsQueue.remove();
+          Map<NodeValue<V>> curr = kNearestNeighborsQueue.remove();
           if (excludeTarget && !(curr.getKey().getId().equals(targetPoint.getId()))) { returnNeighbors.add(curr.getKey()); }
           else if (!excludeTarget) { returnNeighbors.add(curr.getKey()); } // exclude the target star ID if applicable
         } return returnNeighbors;
@@ -97,7 +97,7 @@ public class KDTree<V> {
      @param neighbors The PriorityQueue to which valid KeyDistances should be added in ascending order of their distances.
      @param rev The PriorityQueue to which valid KeyDistances should be added in descending order of their distances to peek the maximum valid neighbor at that level of iteration.
      */
-    public void searchAlgorithm(Node<NodeValue<V>> root, int k, NodeValue<V> targ, PriorityQueue<KeyDistance<NodeValue<V>>> neighbors, PriorityQueue<KeyDistance<NodeValue<V>>> rev, int dim) {
+    public void searchAlgorithm(Node<NodeValue<V>> root, int k, NodeValue<V> targ, PriorityQueue<Map<NodeValue<V>>> neighbors, PriorityQueue<Map<NodeValue<V>>> rev, int dim) {
         if (!(root.getValue() == null || k == 0)) {
             double currDistSq = 0;
             double distCurr;
@@ -107,7 +107,7 @@ public class KDTree<V> {
             catch (IndexOutOfBoundsException e) { distCurr = Math.sqrt(currDistSq); }
 
             NodeValue<V> rootId = root.getValue();
-            KeyDistance<NodeValue<V>> rootStarDist = new KeyDistance<>(rootId, distCurr);
+            Map<NodeValue<V>> rootStarDist = new Map<>(rootId, distCurr);
 
             // If not all k neighbors have been filled yet, indiscriminately add to the PriorityQueue
             if (neighbors.size() < k || distCurr <= rev.peek().getDistance()) { neighbors.add(rootStarDist); rev.add(rootStarDist); }
