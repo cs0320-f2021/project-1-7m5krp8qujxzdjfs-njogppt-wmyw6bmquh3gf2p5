@@ -36,14 +36,14 @@ public class KDTree<V> {
             finalResult.add(first);
             finalResult.add(second);
 
-            List<NodeValue<V>> lesserNodeValues = finalResult.get(0);
-            List<NodeValue<V>> greaterNodeValues = finalResult.get(1);
+            List<NodeValue<V>> less = finalResult.get(0);
+            List<NodeValue<V>> more = finalResult.get(1);
 
             int dimNext; // calculate next dimension
             if (dim + 1 > _k) { dimNext = 1; }
             else { dimNext = dim + 1; }
 
-            return new Node<>(medianNodeValues, generateOnStart(lesserNodeValues, dimNext), generateOnStart(greaterNodeValues, dimNext));
+            return new Node<>(medianNodeValues, generateOnStart(less, dimNext), generateOnStart(more, dimNext));
         } else { return new Node<>(null, null, null); }
     }
 
