@@ -47,14 +47,9 @@ public class KDTree<V> {
         } else { return new Node<>(null, null, null); }
     }
 
-    /** Get the first few IDs of KeyDistances within the passed threshold with the least distances, randomizing the order of any with tied distances, by using a Nearest Neighbors Algorithm.
-     @param k An int threshold representing the maximum number of IDs that can be returned.
-     @param targetPoint A Coordinate of type specified when constructing the KdTreeSearch representing the point around which all distances will be calculated.
-     @param excludeTarget A Boolean representing whether the targetPoint should be included or excluded within the List of IDs returned
-     @return A List of IDs of type specified when constructing the KdTreeSearch.
-     */
-    public List<NodeValue<V>> getKNN(int k, NodeValue<V> targetPoint, Boolean excludeTarget) {
-        if (excludeTarget) { k++; } // this is to account for the fact that the neighbors will exclude the target star
+    // return List of "k" nearest neighbors to "targ"
+    public List<NodeValue<V>> getKNN(int k, NodeValue<V> targ) {
+        k++; // this is to account for the fact that the neighbors will exclude the target star
         Comparator<Map<NodeValue<V>>> byDistance = Comparator.comparing(Map::getDistance);
 
         Comparator<Map<NodeValue<V>>> byReverseDistance = Comparator.comparing(keyDist -> -1 * keyDist.getDistance());
@@ -62,14 +57,13 @@ public class KDTree<V> {
         // maintaining a reverse ordered PriorityQueue to facilitate ease of peeking maximum known neighbor distance
         PriorityQueue<Map<NodeValue<V>>> kNearestNeighborsReverse = new PriorityQueue<>(byReverseDistance);
 
-        this.searchAlgorithm(_root, k, targetPoint, kNearestNeighborsQueue, kNearestNeighborsReverse, 1); // the big boi
+        this.searchAlgorithm(_root, k, targ, kNearestNeighborsQueue, kNearestNeighborsReverse, 1); // the big boi
 
+        k--; // reset k to account for previous offset
         List<NodeValue<V>> returnNeighbors = new ArrayList<>();
-        if (excludeTarget) { k--; } // reset k to account for previous offset
         while (returnNeighbors.size() < k) {
           Map<NodeValue<V>> curr = kNearestNeighborsQueue.remove();
-          if (excludeTarget && !(curr.getKey().getId().equals(targetPoint.getId()))) { returnNeighbors.add(curr.getKey()); }
-          else if (!excludeTarget) { returnNeighbors.add(curr.getKey()); } // exclude the target star ID if applicable
+          if (!(curr.getKey().getId().equals(targ.getId()))) { returnNeighbors.add(curr.getKey()); }
         } return returnNeighbors;
 
 //        List<KeyDistance<NodeValue<V>>> kNearestNeighborsList = new ArrayList<>();
@@ -210,40 +204,7 @@ public class KDTree<V> {
 //    double newZ = (z - z2) * (z - z2);
 //    return Math.sqrt(newX + newY + newZ);
 //  }
-
-
-
-
-
-
-
-
-//  public List<V> getKNearestNeighbors() {
-//    ArrayList<V> kNearestNeighbors = new ArrayList<V>();
 //
-//
-//
-//
-//
-//    return kNearestNeighbors;
-//  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   // kinda useless ig
 //  public void addNode(V val) {
 //    if (val == null) {
@@ -278,5 +239,4 @@ public class KDTree<V> {
 //      }
 //    }
 //  }
-
 }
