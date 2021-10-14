@@ -18,7 +18,7 @@ public class KDTree<V> {
 
     public Node<NodeValue<V>> getRoot() { return _root; }
   
-    public Node<NodeValue<V>> generateOnStart(List<NodeValue<V>> nodeValuesLeft, int dim) {
+    private Node<NodeValue<V>> generateOnStart(List<NodeValue<V>> nodeValuesLeft, int dim) {
         if (nodeValuesLeft.size() != 0) {
             int indexMid = nodeValuesLeft.size() / 2;
             Comparator<NodeValue<V>> byDimension = Comparator.comparingDouble(nodeValues -> nodeValues.getSingleNodeValue(dim));
@@ -91,7 +91,7 @@ public class KDTree<V> {
      @param neighbors The PriorityQueue to which valid KeyDistances should be added in ascending order of their distances.
      @param rev The PriorityQueue to which valid KeyDistances should be added in descending order of their distances to peek the maximum valid neighbor at that level of iteration.
      */
-    public void searchAlgorithm(Node<NodeValue<V>> root, int k, NodeValue<V> targ, PriorityQueue<Map<NodeValue<V>>> neighbors, PriorityQueue<Map<NodeValue<V>>> rev, int dim) {
+    private void searchAlgorithm(Node<NodeValue<V>> root, int k, NodeValue<V> targ, PriorityQueue<Map<NodeValue<V>>> neighbors, PriorityQueue<Map<NodeValue<V>>> rev, int dim) {
         if (!(root.getValue() == null || k == 0)) {
             double currDistSq = 0;
             double distCurr;
