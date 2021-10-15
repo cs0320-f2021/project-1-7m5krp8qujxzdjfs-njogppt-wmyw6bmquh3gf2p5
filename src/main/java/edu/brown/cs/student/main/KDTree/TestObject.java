@@ -3,7 +3,7 @@ package edu.brown.cs.student.main.KDTree;
 import java.util.ArrayList;
 import java.util.List;
 
-// for testing purposes only
+// for testing purposes only, implementation of NodeValue<>
 public class TestObject implements NodeValue<Integer> {
 
   Integer id;
@@ -19,9 +19,7 @@ public class TestObject implements NodeValue<Integer> {
   }
 
   @Override
-  public Integer getId() {
-    return id;
-  }
+  public Integer getId() { return id; }
 
   @Override
   public List<Double> getNodeValue() {
@@ -34,27 +32,18 @@ public class TestObject implements NodeValue<Integer> {
 
   @Override
   public Double getSingleNodeValue(int dim) {
-    if (dim % 3 == 1) {
-      return x;
-    } else if (dim % 3 == 2) {
-      return y;
-    } else {
-      return z;
-    }
+    if (dim == 1) { return x; }
+    else if (dim == 2) { return y; }
+    else if (dim == 3) { return z; }
+    else { throw new IndexOutOfBoundsException("yall are bad"); }
   }
 
   @Override
-  public int getSecondAttribute() {
-    return 0;
-  }
+  public int getSecondAttribute() { return 0; }
 
   @Override
-  public int getFourthAttribute() {
-    return 0;
-  }
+  public int getFourthAttribute() { return 0; }
 
   @Override
-  public int getFifthAttribute() {
-    return 0;
-  }
+  public int getFifthAttribute() { return 0; }
 }
