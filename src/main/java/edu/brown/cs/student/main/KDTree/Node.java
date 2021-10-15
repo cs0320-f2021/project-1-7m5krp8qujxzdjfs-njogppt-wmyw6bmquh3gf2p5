@@ -15,7 +15,6 @@ public class Node<V> {
 //  private Node<NodeValue> _lesser = null; // left child node
 //  private Node<NodeValue> _greater = null; // right child node
 
-
   public Node(V value, Node<V> left, Node<V> right) {
     this._value = value;
     this._left = left;
@@ -28,9 +27,6 @@ public class Node<V> {
 //    this._depth = depth;
 //  }
 
-  
-  
-  
   public V getValue() { return _value; }
   
   public Node<V> getLeft() { return _left; }
@@ -56,6 +52,4 @@ public class Node<V> {
 //  public NodeValue getKey() { return _key; }
 //
 //  public void setKey(NodeValue key) { this._key = key; }
-
-
 }
