@@ -1,4 +1,4 @@
-package edu.brown.cs.student.main;
+package edu.brown.cs.student.main.Star;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
