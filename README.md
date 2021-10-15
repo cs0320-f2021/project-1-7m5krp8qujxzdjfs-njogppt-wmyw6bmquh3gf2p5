@@ -10,8 +10,8 @@ To start the server use:
 ---
 # Project Details
 Project Name: Project 1 - Data \
-Project Members and Contribution: \
-Total Time Spent: \
+Project Members and Contribution: Amanda Levy, Futen Wang, and Olena Mursalova\
+Total Time Spent: 
 ---
 ## ORM Tests
 First `database path/to/database` must be run to create a database connection. 

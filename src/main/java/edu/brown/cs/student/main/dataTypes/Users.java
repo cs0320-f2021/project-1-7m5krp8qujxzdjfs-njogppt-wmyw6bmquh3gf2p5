@@ -2,6 +2,8 @@ package edu.brown.cs.student.main.dataTypes;
 
 import edu.brown.cs.student.main.KDTree.NodeValue;
 
+import java.util.List;
+
 /**
  * A class that stores user info.
  */
@@ -34,6 +36,21 @@ public class Users implements DataTypes, NodeValue {
     this.age = age;
     this.bodyType = bodyType;
     this.horoscope = horoscope;
+  }
+
+  @Override
+  public Object getId() { // new method added in NodeValue interface !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    return null;
+  }
+
+  @Override
+  public List<Double> getNodeValue() { // new method added in NodeValue interface !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    return null;
+  }
+
+  @Override
+  public Double getSingleNodeValue(int dim) { // new method added in NodeValue interface !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    return null;
   }
 
   /**
