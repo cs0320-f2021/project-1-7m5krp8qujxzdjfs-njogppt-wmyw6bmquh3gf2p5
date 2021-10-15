@@ -1,6 +1,7 @@
-package edu.brown.cs.student.main.ORM;
+package edu.brown.cs.student.main.Math;
 
-import edu.brown.cs.student.main.MathBot;
+import edu.brown.cs.student.main.Math.MathBot;
+import edu.brown.cs.student.main.ORM.FunctionHolder;
 
 public class SubtractFunction implements FunctionHolder {
 

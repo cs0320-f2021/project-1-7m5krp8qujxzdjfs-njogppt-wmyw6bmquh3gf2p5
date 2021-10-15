@@ -7,6 +7,8 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
+import edu.brown.cs.student.main.Math.SubtractFunction;
+import edu.brown.cs.student.main.Math.AddFunction;
 import edu.brown.cs.student.main.ORM.*;
 import freemarker.template.Configuration;
 import joptsimple.OptionParser;
