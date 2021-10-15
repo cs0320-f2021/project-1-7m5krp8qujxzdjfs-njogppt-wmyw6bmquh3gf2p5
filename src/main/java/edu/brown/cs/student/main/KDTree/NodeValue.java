@@ -14,5 +14,5 @@ public interface NodeValue<V> {
     int getSecondAttribute(); // not used anymore
     int getFourthAttribute(); // not used anymore
     int getFifthAttribute(); // not used anymore
-//    int getDimensionValue(int currentDepth);
+//  int getDimensionValue(int currentDepth);
 }
