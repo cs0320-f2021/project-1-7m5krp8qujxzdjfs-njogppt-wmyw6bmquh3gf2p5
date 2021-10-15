@@ -1,11 +1,12 @@
 package edu.brown.cs.student.main.KDTree;
 
 import java.util.ArrayList; import java.util.Comparator; import java.util.List; import java.util.PriorityQueue;
+import edu.brown.cs.student.main.NodeValueHandlerClass;
 
 public class KDTree<V> {
   
     private int _k; // the dimensions of the space (ex. 3-dimensional space)
-//  private Integer _dimension;
+    private Integer _dimension;
     private Node<NodeValue<V>> _root; // root node
 //  private Node<V> _root;
 
@@ -14,11 +15,11 @@ public class KDTree<V> {
         this._root = this.generateOnStart(new ArrayList<>(nodeValues), 1);
     }
   
-//    public KDTree(Integer k) { this._k =  k; }
+    public KDTree(Integer k) { this._k =  k; }
 
     public Node<NodeValue<V>> getRoot() { return _root; }
   
-    public Node<NodeValue<V>> generateOnStart(List<NodeValue<V>> nodeValuesLeft, int dim) {
+    private Node<NodeValue<V>> generateOnStart(List<NodeValue<V>> nodeValuesLeft, int dim) {
         if (nodeValuesLeft.size() != 0) {
             int indexMid = nodeValuesLeft.size() / 2;
             Comparator<NodeValue<V>> byDimension = Comparator.comparingDouble(nodeValues -> nodeValues.getSingleNodeValue(dim));
@@ -65,22 +66,6 @@ public class KDTree<V> {
           Map<NodeValue<V>> curr = kNearestNeighborsQueue.remove();
           if (!(curr.getKey().getId().equals(targ.getId()))) { returnNeighbors.add(curr.getKey()); }
         } return returnNeighbors;
-
-//        List<KeyDistance<NodeValue<V>>> kNearestNeighborsList = new ArrayList<>();
-//
-//        // begin conversion process of PriorityQueue into ListNaiveSearch to handle randomness of tied distance star IDs
-//        while (!kNearestNeighborsQueue.isEmpty()) {
-//          KeyDistance<NodeValue<V>> keyDist = kNearestNeighborsQueue.remove();
-//
-//          if (excludeTarget) {
-//            if ( !(keyDist.getKey().getId().equals(targetPoint.getId())) ) { kNearestNeighborsList.add(keyDist); }
-//          }
-//          else { kNearestNeighborsList.add(keyDist); } // exclude the target star ID if applicable
-//        }
-//
-//        ListNaiveSearch<NodeValue<V>> kNN = new ListNaiveSearch<>(kNearestNeighborsList);
-//        if (excludeTarget) { return kNN.getNaiveNearestNeighbors(k - 1); } // discount for the previous offset since we still want k IDs at the end
-//        else { return kNN.getNaiveNearestNeighbors(k); }
     }
 
     /** Update the PriorityQueue of KeyDistance with valid Neighbors on the path to the target in the passed Node tree.
@@ -91,7 +76,7 @@ public class KDTree<V> {
      @param neighbors The PriorityQueue to which valid KeyDistances should be added in ascending order of their distances.
      @param rev The PriorityQueue to which valid KeyDistances should be added in descending order of their distances to peek the maximum valid neighbor at that level of iteration.
      */
-    public void searchAlgorithm(Node<NodeValue<V>> root, int k, NodeValue<V> targ, PriorityQueue<Map<NodeValue<V>>> neighbors, PriorityQueue<Map<NodeValue<V>>> rev, int dim) {
+    private void searchAlgorithm(Node<NodeValue<V>> root, int k, NodeValue<V> targ, PriorityQueue<Map<NodeValue<V>>> neighbors, PriorityQueue<Map<NodeValue<V>>> rev, int dim) {
         if (!(root.getValue() == null || k == 0)) {
             double currDistSq = 0;
             double distCurr;
@@ -127,116 +112,86 @@ public class KDTree<V> {
         }
     }
 
-//  public Node<NodeValue> getMidpointToNode(int depth, List<NodeValue> nodeValueList) {
-//    NodeValueHandlerClass nodeValueSorter = new NodeValueHandlerClass();
-//    List<NodeValue> sortedNodeValueList = nodeValueSorter.sortedByDimension(depth, nodeValueList);
-//    int midPointIndex = (sortedNodeValueList.size() / 2) - 1;
-//    NodeValue nodeValueToNode = sortedNodeValueList.get(midPointIndex);
-//
-//    List<NodeValue> leftList = sortedNodeValueList.subList(0, midPointIndex);
-//    List<NodeValue> rightList = sortedNodeValueList.subList(midPointIndex + 1, sortedNodeValueList.size());
-//
-//    return this.createNode(sortedNodeValueList.get(midPointIndex), this.getMidpointToNode(depth + 1,
-//        leftList), this.getMidpointToNode(depth + 1, rightList), depth);
-//  }
-//
-//
-//  public Node<NodeValue> createNode(NodeValue val, Node<NodeValue> left, Node<NodeValue> right, int depth) {
-//    Node<NodeValue> newNode = new Node<>(val, depth, _k);
-//
-//    if (_root == null) { _root = newNode; }
-//
-//    newNode.setLesser(left);
-//    newNode.setGreater(right);
-//    left.setParent(newNode);
-//    right.setParent(newNode);
-//
-//    return newNode;
-//  }
-//
-//  public Node<V> nearestNeighbor(Node<V> root, Node<V> target, int depth) {
-//    if (root == null) return null;
-//
-//    Node<V> nextBranch = null;
-//    Node<V> otherBranch = null;
-//    if (target[depth % _k] < root[depth % _k]) {
-//      nextBranch = root.getLesser();
-//      otherBranch = root.getGreater();
-//    } else {
-//      nextBranch = root.getGreater();
-//      otherBranch = root.getLesser();
-//    }
-//
-//    Node<V> temp = this.nearestNeighbor(nextBranch, target, depth + 1);
-//    Node<V> best = null;
-//    if (this.NodeDistance(target, temp) < this.NodeDistance(target, root)) {
-//      best = temp;
-//    } else {
-//      best = root;
-//    }
-//
-//    double radius = this.NodeDistance(target, best);
-//    double dist = target[depth % _k] - root[depth % _k];
-//
-//    if (radius >= dist) {
-//      temp = this.nearestNeighbor(otherBranch, target, depth + 1);
-//      if (this.NodeDistance(target, temp) < this.NodeDistance(target, best)) {
-//        best = temp;
-//      } else {
-//        best = best;
-//      }
-//    }
-//
-//    return best;
-//  }
-//
-  // takes in two nodes of the tree and returns the euclidean distance between them
-//  public double NodeDistance(Node<V> node1, Node<V> node2) {
-//    V key1 = node1.getKey();
-//    V key2 = node2.getKey();
-//
-//    return euclideanDist();
-//  }
-//
-//  public double euclideanDist(double x, double y, double z, double x2, double y2, double z2) {
-//    double newX = (x - x2) * (x - x2);
-//    double newY = (y - y2) * (y - y2);
-//    double newZ = (z - z2) * (z - z2);
-//    return Math.sqrt(newX + newY + newZ);
-//  }
-//
-  // kinda useless ig
-//  public void addNode(V val) {
-//    if (val == null) {
-//      return; // exit
-//    }
-//    if (this._root == null) { // tree empty
-//      this._root = new Node<V>(val, this._k, 0); // create root with val
-//      return; // exit
-//    }
-//
-//    Node<V> currNode = this._root; // the current node we're looking at in the traversal
-//
-//    while (true) { // goes forever until reaches a break statement
-//
-//      int axis = currNode.getDepth() % _k; // what attribute we're looking at at this level
-//      if(this._comparator.compare(currNode.getKey(), val, axis) >= 0) { // lesser          !!!!!!!!!!!!!!!!!!!--figure out way to compare--!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//        if(currNode.getLesser() == null) { // no left child
-//          Node<V> newNode = new Node<>(val, currNode.getDepth() + 1, _k); // create new node
-//          newNode.setParent(currNode); // child points at parent
-//          currNode.setLesser(newNode); // parent points at child
-//          break; // exit loop
-//        }
-//        currNode = currNode.getLesser(); // if there is a left child, set currNode to it
-//      } else { //greater
-//        if(currNode.getGreater() == null) { // no right child
-//          Node<V> newNode = new Node<>(val, currNode.getDepth() + 1, _k); // create new node
-//          newNode.setParent(currNode); // child points at parent
-//          currNode.setGreater(newNode); // parent points at child
-//          break; // exit loop
-//        }
-//        currNode = currNode.getGreater(); // if there is a right child, set currNode to it
-//      }
-//    }
-//  }
+    private Node<NodeValue<V>> getMidpointToNode(int depth, List<NodeValue<V>> nodeValueList) {
+        NodeValueHandlerClass nodeValueSorter = new NodeValueHandlerClass();
+        List<NodeValue> sortedNodeValueList = nodeValueSorter.sortedByDimension(depth, new ArrayList<>());
+        int midPointIndex = (sortedNodeValueList.size() / 2) - 1;
+        NodeValue nodeValueToNode = sortedNodeValueList.get(midPointIndex);
+        List<NodeValue> leftList = sortedNodeValueList.subList(0, midPointIndex);
+        List<NodeValue> rightList = sortedNodeValueList.subList(midPointIndex + 1, sortedNodeValueList.size());
+//      return this.createNode(sortedNodeValueList.get(midPointIndex), this.getMidpointToNode(depth + 1, leftList, this.getMidpointToNode(depth + 1, rightList), depth));
+        return null;
+    }
+
+    private Node<NodeValue> createNode(NodeValue val, Node<NodeValue<V>> left, Node<NodeValue<V>> right, int depth) {
+        Node<V> newNode = new Node<>(val, depth, _k);
+        if (_root == null) { _root = new Node<>(); }
+        newNode.setLesser(left);
+        newNode.setGreater(right);
+        left.setParent(new Node<>());
+        right.setParent(new Node<>());
+//      return newNode;
+        return null;
+    }
+
+    private Node<V> nearestNeighbor(Node<V> root, Node<NodeValue<V>> target, int depth) {
+        if (root == null) return null;
+        Node<NodeValue<V>> nextBranch = null;
+        Node<NodeValue<V>> otherBranch = null;
+//      if (target[depth % _k] < root[depth % _k]) {
+        if (true) { nextBranch = root.getLesser(); otherBranch = root.getGreater(); }
+        else { nextBranch = root.getGreater(); otherBranch = root.getLesser(); }
+        Node<V> temp = this.nearestNeighbor(new Node<>(), target, depth + 1);
+        Node<V> best = null;
+        if (this.NodeDistance(target, new Node<NodeValue<V>>()) < this.NodeDistance(target, new Node<NodeValue<V>>())) { best = temp; }
+        else { best = root; }
+        double radius = this.NodeDistance(target, new Node<>());
+//      double dist = target[depth % _k] - root[depth % _k];
+        double dist = 0.0;
+        if (radius >= dist) {
+            temp = this.nearestNeighbor(new Node<>(), target, depth + 1);
+            if (this.NodeDistance(target, new Node<NodeValue<V>>()) < this.NodeDistance(target, new Node<NodeValue<V>>())) { best = temp; }
+            else { best = best; }
+        } return best;
+    }
+
+    // takes in two nodes of the tree and returns the euclidean distance between them
+    private double NodeDistance(Node<NodeValue<V>> node1, Node<NodeValue<V>> node2) {
+//      V key1 = node1.getKey();
+//      V key2 = node2.getKey();
+        return euclideanDist(1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+    }
+
+    private double euclideanDist(double x, double y, double z, double x2, double y2, double z2) {
+        double newX = (x - x2) * (x - x2);
+        double newY = (y - y2) * (y - y2);
+        double newZ = (z - z2) * (z - z2);
+        return Math.sqrt(newX + newY + newZ);
+    }
+
+    // kinda useless ig
+    private void addNode(V val) {
+        if (val == null) { return; }// exit
+        if (this._root == null) { this._root = new Node<NodeValue<V>>(); return; } // create root with val and exit
+        Node<NodeValue<V>> currNode = this._root; // the current node we're looking at in the traversal
+        while (true) { // goes forever until reaches a break statement
+            int axis = currNode.getDepth() % _k; // what attribute we're looking at at this level
+//              if (this._comparator.compare(currNode.getKey(), val, axis) >= 0) { // lesser
+            if (true) {
+                if(currNode.getLesser() == null) { // no left child
+                Node<V> newNode = new Node<V>((NodeValue) val, currNode.getDepth() + 1, _k); // create new node
+                newNode.setParent(currNode); // child points at parent
+                currNode.setLesser(new Node<NodeValue<NodeValue<V>>>()); // parent points at child
+                break; // exit loop
+                } currNode = currNode; // if there is a left child, set currNode to it
+            } else { //greater
+                if(currNode.getGreater() == null) { // no right child
+                    Node<V> newNode = new Node<V>((NodeValue) val, currNode.getDepth() + 1, _k); // create new node
+                    newNode.setParent(currNode); // child points at parent
+                    currNode.setGreater(new Node<NodeValue<NodeValue<V>>>()); // parent points at child
+                    break; // exit loop
+                } currNode = currNode; // if there is a right child, set currNode to it
+            }
+        }
+    }
 }
