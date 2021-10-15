@@ -30,7 +30,5 @@ public class KDTreeTest {
     List<NodeValue<Integer>> result = kdt.getKNN(1, target);
 
     assertEquals(7.0, result.get(0).getSingleNodeValue(1), .01);
-
-//    assertEquals(13.5, output, 0.01);
   }
 }

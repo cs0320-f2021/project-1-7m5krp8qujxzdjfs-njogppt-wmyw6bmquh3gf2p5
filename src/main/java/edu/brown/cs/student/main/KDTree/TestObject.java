@@ -34,12 +34,14 @@ public class TestObject implements NodeValue<Integer> {
 
   @Override
   public Double getSingleNodeValue(int dim) {
-    if (dim % 3 == 1) {
+    if (dim == 1) {
       return x;
-    } else if (dim % 3 == 2) {
+    } else if (dim == 2) {
       return y;
-    } else {
+    } else if (dim == 3) {
       return z;
+    } else {
+      throw new IndexOutOfBoundsException("yall are bad");
     }
   }
 
