@@ -51,9 +51,9 @@ public class KDTree<V> {
     // return List of "k" nearest neighbors to "targ"
     public List<NodeValue<V>> getKNN(int k, NodeValue<V> targ) {
         k++; // this is to account for the fact that the neighbors will exclude the target star
-        Comparator<Map<NodeValue<V>>> byDistance = Comparator.comparing(Map::getDistance);
+        Comparator<Map<NodeValue<V>>> byDistance = Comparator.comparing(Map::getDist);
 
-        Comparator<Map<NodeValue<V>>> byReverseDistance = Comparator.comparing(keyDist -> -1 * keyDist.getDistance());
+        Comparator<Map<NodeValue<V>>> byReverseDistance = Comparator.comparing(keyDist -> -1 * keyDist.getDist());
         PriorityQueue<Map<NodeValue<V>>> kNearestNeighborsQueue = new PriorityQueue<>(byDistance);
         // maintaining a reverse ordered PriorityQueue to facilitate ease of peeking maximum known neighbor distance
         PriorityQueue<Map<NodeValue<V>>> kNearestNeighborsReverse = new PriorityQueue<>(byReverseDistance);
@@ -64,7 +64,7 @@ public class KDTree<V> {
         List<NodeValue<V>> returnNeighbors = new ArrayList<>();
         while (returnNeighbors.size() < k) {
           Map<NodeValue<V>> curr = kNearestNeighborsQueue.remove();
-          if (!(curr.getKey().getId().equals(targ.getId()))) { returnNeighbors.add(curr.getKey()); }
+          if (!(curr.getVal().getId().equals(targ.getId()))) { returnNeighbors.add(curr.getVal()); }
         } return returnNeighbors;
     }
 
@@ -89,7 +89,7 @@ public class KDTree<V> {
             Map<NodeValue<V>> rootStarDist = new Map<>(rootId, distCurr);
 
             // If not all k neighbors have been filled yet, indiscriminately add to the PriorityQueue
-            if (neighbors.size() < k || distCurr <= rev.peek().getDistance()) { neighbors.add(rootStarDist); rev.add(rootStarDist); }
+            if (neighbors.size() < k || distCurr <= rev.peek().getDist()) { neighbors.add(rootStarDist); rev.add(rootStarDist); }
 
             int nextDimension; // get the next dimension
             if (dim + 1 > targ.getNodeValue().size()) { nextDimension = 1; }
@@ -99,7 +99,7 @@ public class KDTree<V> {
                 this.searchAlgorithm(root.getLeft(), k, targ, neighbors, rev, nextDimension);
                 this.searchAlgorithm(root.getRight(), k, targ, neighbors, rev, nextDimension);
             } else {
-                double maxEuclideanDistance = rev.peek().getDistance();
+                double maxEuclideanDistance = rev.peek().getDist();
                 double axisDistance = Math.abs(targ.getSingleNodeValue(dim) - root.getValue().getSingleNodeValue(dim));
                 if (maxEuclideanDistance >= axisDistance) { // recur on both children
                     this.searchAlgorithm(root.getLeft(), k, targ, neighbors, rev, nextDimension);
@@ -157,8 +157,8 @@ public class KDTree<V> {
 
     // takes in two nodes of the tree and returns the euclidean distance between them
     private double NodeDistance(Node<NodeValue<V>> node1, Node<NodeValue<V>> node2) {
-//      V key1 = node1.getKey();
-//      V key2 = node2.getKey();
+//      V key1 = node1.getVal();
+//      V key2 = node2.getVal();
         return euclideanDist(1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
     }
 
@@ -176,7 +176,7 @@ public class KDTree<V> {
         Node<NodeValue<V>> currNode = this._root; // the current node we're looking at in the traversal
         while (true) { // goes forever until reaches a break statement
             int axis = currNode.getDepth() % _k; // what attribute we're looking at at this level
-//              if (this._comparator.compare(currNode.getKey(), val, axis) >= 0) { // lesser
+//              if (this._comparator.compare(currNode.getVal(), val, axis) >= 0) { // lesser
             if (true) {
                 if(currNode.getLesser() == null) { // no left child
                 Node<V> newNode = new Node<V>((NodeValue) val, currNode.getDepth() + 1, _k); // create new node
