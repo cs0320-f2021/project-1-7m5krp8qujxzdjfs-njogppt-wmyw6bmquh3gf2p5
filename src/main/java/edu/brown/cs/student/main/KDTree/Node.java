@@ -1,6 +1,6 @@
 package edu.brown.cs.student.main.KDTree;
 
-public class Node<V> {
+public class Node<V> { 
 
     private NodeValue _key; // generic
     private int _depth = 0; // location of this node within the tree
