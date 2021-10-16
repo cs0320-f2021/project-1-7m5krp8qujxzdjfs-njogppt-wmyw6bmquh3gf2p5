@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import edu.brown.cs.student.main.Math.SubtractFunction;
 import edu.brown.cs.student.main.Math.AddFunction;
 import edu.brown.cs.student.main.ORM.*;
+import edu.brown.cs.student.main.Star.NaiveNeighborsFunction;
 import freemarker.template.Configuration;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -40,8 +40,6 @@ public final class Main {
 
   private String[] args;
 
-  public HashMap<String, FunctionHolder> CommandToFunction;
-
   private Main(String[] args) {
     this.args = args;
   }
@@ -62,16 +60,20 @@ public final class Main {
     if (options.has("gui")) {
       runSparkServer((int) options.valueOf("port"));
     }
-
-
     REPL REPLForMain = new REPL();
-    AddFunction MainAddFunction = new AddFunction();
-    REPLForMain.addFunctionToMap("add", MainAddFunction);
-    SubtractFunction MainSubtractFunction = new SubtractFunction();
-    REPLForMain.addFunctionToMap("subtract", MainSubtractFunction);
-    StarFunction MainStarFunction = new StarFunction();
-    REPLForMain.addFunctionToMap("stars", MainStarFunction);
-
+    REPLForMain.addFunctionToMap("add", new AddFunction());
+    REPLForMain.addFunctionToMap("subtract", new SubtractFunction());
+    REPLForMain.addFunctionToMap("insert", new InsertFunction());
+    REPLForMain.addFunctionToMap("delete", new DeleteFunction());
+    REPLForMain.addFunctionToMap("select", new SelectFunction());
+    REPLForMain.addFunctionToMap("update", new UpdateFunction());
+    REPLForMain.addFunctionToMap("sql", new SQLFunction());
+    REPLForMain.addFunctionToMap("naive_neighbors", new NaiveNeighborsFunction());
+    try {
+      REPLForMain.run();
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
   }
 
 

@@ -2,8 +2,7 @@ package edu.brown.cs.student.main.KDTree;
 
 import java.util.List;
 
-// Interface of a User with a specified type ID.
-// @param <V> Any type for the ID of the user that is specified when constructing a User.
+// interface for a user
 public interface NodeValue<V> {
     V getId(); // return the generic object's identification
     List<Double> getNodeValue(); // a list of as many numbers as dimensions (i.e [x, y, z] )
