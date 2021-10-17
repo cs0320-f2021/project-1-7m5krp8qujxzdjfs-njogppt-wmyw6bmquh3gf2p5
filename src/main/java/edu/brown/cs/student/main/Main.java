@@ -62,6 +62,7 @@ public final class Main {
       runSparkServer((int) options.valueOf("port"));
     }
     REPL REPLForMain = new REPL();
+    // Add the commands and their implementations here.
     REPLForMain.addFunctionToMap("add", new AddFunction());
     REPLForMain.addFunctionToMap("subtract", new SubtractFunction());
     REPLForMain.addFunctionToMap("insert", new InsertFunction());

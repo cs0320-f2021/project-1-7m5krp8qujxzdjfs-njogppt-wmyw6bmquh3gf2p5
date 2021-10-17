@@ -6,6 +6,9 @@ import edu.brown.cs.student.main.Star.StarData;
 
 import java.util.List;
 
+/**
+ * A FunctionHolder for the similar command.
+ */
 public class SimilarFunction implements FunctionHolder {
   private KDTree<Integer> kdt;
 

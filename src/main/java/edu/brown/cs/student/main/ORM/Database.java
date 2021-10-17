@@ -273,7 +273,7 @@ public class Database {
 
   /**
    * Returns a list of Users objects using the users table in the connected database.
-   * @return - A list of Users objects.
+   * @return - A list of Users objects stored as NodeValue<Integer>.
    */
   public List<NodeValue<Integer>> getUsers() throws SQLException {
     List<NodeValue<Integer>> output = new ArrayList<>();

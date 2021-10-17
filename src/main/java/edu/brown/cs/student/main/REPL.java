@@ -1,18 +1,12 @@
 package edu.brown.cs.student.main;
 
 import edu.brown.cs.student.main.KDTree.KDTree;
-import edu.brown.cs.student.main.KDTree.Node;
 import edu.brown.cs.student.main.KDTree.NodeValue;
 import edu.brown.cs.student.main.ORM.Database;
 import edu.brown.cs.student.main.Star.StarData;
-import edu.brown.cs.student.main.dataTypes.DataTypes;
-import edu.brown.cs.student.main.dataTypes.Users;
-
-import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
