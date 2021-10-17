@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * A class that stores user info.
  */
-public class Users implements DataTypes, NodeValue {
+public class Users implements DataTypes, NodeValue<Integer> {
 
   private String userId;
   private String weight;
@@ -39,8 +39,8 @@ public class Users implements DataTypes, NodeValue {
   }
 
   @Override
-  public Object getId() { // new method added in NodeValue interface !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    return null;
+  public Integer getId() { // new method added in NodeValue interface !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    return Integer.parseInt(userId);
   }
 
   @Override

@@ -1,12 +1,19 @@
 package edu.brown.cs.student.main;
 
+import edu.brown.cs.student.main.KDTree.KDTree;
+import edu.brown.cs.student.main.KDTree.Node;
+import edu.brown.cs.student.main.KDTree.NodeValue;
 import edu.brown.cs.student.main.ORM.Database;
 import edu.brown.cs.student.main.Star.StarData;
+import edu.brown.cs.student.main.dataTypes.DataTypes;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public class REPL {
   private HashMap<String, FunctionHolder> commandToFunction = new HashMap<>();
@@ -17,8 +24,9 @@ public class REPL {
   public void run() throws IOException {
     try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
       String input;
-      StarData starData = new StarData("");
-      Database database = null;
+      StarData starData;
+      Database database;
+      KDTree<NodeValue<>> kdTree;
       while ((input = br.readLine()) != null) {
         try {
           input = input.trim();
@@ -37,6 +45,8 @@ public class REPL {
             for (FunctionHolder f : functions) {
               f.setStarData(starData);
             }
+            // } else if (command.equals("users")) {
+            // TODO: Load users into KDTree
           } else {
             commandToFunction.get(command).implementFunction(arguments);
           }
