@@ -1,6 +1,7 @@
 package edu.brown.cs.student.main.Star;
 
 import edu.brown.cs.student.main.FunctionHolder;
+import edu.brown.cs.student.main.KDTree.KDTree;
 import edu.brown.cs.student.main.ORM.Database;
 
 import java.util.List;
@@ -40,6 +41,11 @@ public class NaiveNeighborsFunction implements FunctionHolder {
 
   @Override
   public void setDatabase(Database db) {
+
+  }
+
+  @Override
+  public void setKDTree(KDTree<Integer> kdTree) {
 
   }
 }

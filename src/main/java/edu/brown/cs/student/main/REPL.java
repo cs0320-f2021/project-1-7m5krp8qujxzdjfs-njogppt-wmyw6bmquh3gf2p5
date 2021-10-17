@@ -6,7 +6,9 @@ import edu.brown.cs.student.main.KDTree.NodeValue;
 import edu.brown.cs.student.main.ORM.Database;
 import edu.brown.cs.student.main.Star.StarData;
 import edu.brown.cs.student.main.dataTypes.DataTypes;
+import edu.brown.cs.student.main.dataTypes.Users;
 
+import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,7 +28,7 @@ public class REPL {
       String input;
       StarData starData;
       Database database;
-      KDTree<NodeValue<>> kdTree;
+      KDTree<Integer> kdTree;
       while ((input = br.readLine()) != null) {
         try {
           input = input.trim();
@@ -45,8 +47,14 @@ public class REPL {
             for (FunctionHolder f : functions) {
               f.setStarData(starData);
             }
-            // } else if (command.equals("users")) {
-            // TODO: Load users into KDTree
+          } else if (command.equals("users")) {
+            Database db = new Database(arguments[1]);
+            List<NodeValue<Integer>> users = db.getUsers();
+            kdTree = new KDTree<>(3, users);
+            Collection<FunctionHolder> functions = commandToFunction.values();
+            for (FunctionHolder f : functions) {
+              f.setKDTree(kdTree);
+            }
           } else {
             commandToFunction.get(command).implementFunction(arguments);
           }

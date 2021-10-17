@@ -39,7 +39,7 @@ public class Users implements DataTypes, NodeValue<Integer> {
   }
 
   @Override
-  public Integer getId() { // new method added in NodeValue interface !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  public Integer getId() {
     return Integer.parseInt(userId);
   }
 
@@ -59,8 +59,7 @@ public class Users implements DataTypes, NodeValue<Integer> {
    */
   public int getSecondAttribute() {
     String[] w = this.weight.split("l");
-    int lbs = Integer.parseInt(w[0]);
-    return lbs;
+    return Integer.parseInt(w[0]);
   }
 
   /**
@@ -80,14 +79,6 @@ public class Users implements DataTypes, NodeValue<Integer> {
    */
   public int getFifthAttribute() {
     return Integer.parseInt(this.age);
-  }
-
-  /**
-   * Returns the id of the user.
-   * @return - The user's id.
-   */
-  public int getFirstAttribute() {
-    return Integer.parseInt(this.userId);
   }
 
   @Override

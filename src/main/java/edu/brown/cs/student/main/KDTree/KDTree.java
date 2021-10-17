@@ -8,11 +8,13 @@ public class KDTree<V> {
   private int _k; // the dimensions of the space (ex. 3-dimensional space)
   private Integer _dimension;
   private Node<NodeValue<V>> _root; // root node
+  private List<NodeValue<V>> unsorted;
 //  private Node<V> _root;
 
   public KDTree(int dimensions, List<NodeValue<V>> nodeValues) {
     this._k = dimensions;
     this._root = this.generateOnStart(new ArrayList<>(nodeValues), 1);
+    this.unsorted = nodeValues;
   }
 
   public KDTree(Integer k) { this._k =  k; }
@@ -193,5 +195,14 @@ public class KDTree<V> {
         } currNode = currNode; // if there is a right child, set currNode to it
       }
     }
+  }
+
+  public NodeValue<V> getTarget(Integer id) {
+    for (NodeValue<V> node : unsorted) {
+      if (node.getId().equals(id)) {
+        return node;
+      }
+    }
+    throw new RuntimeException("ERROR: There is no user with this ID.");
   }
 }

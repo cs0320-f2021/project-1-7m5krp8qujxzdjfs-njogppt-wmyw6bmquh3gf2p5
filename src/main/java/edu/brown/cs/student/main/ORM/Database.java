@@ -1,5 +1,7 @@
 package edu.brown.cs.student.main.ORM;
 
+import edu.brown.cs.student.main.KDTree.Node;
+import edu.brown.cs.student.main.KDTree.NodeValue;
 import edu.brown.cs.student.main.dataTypes.DataTypes;
 import edu.brown.cs.student.main.dataTypes.Rent;
 import edu.brown.cs.student.main.dataTypes.Reviews;
@@ -268,4 +270,29 @@ public class Database {
       System.out.println(e.getMessage());
     }
   }
+
+  /**
+   * Returns a list of Users objects using the users table in the connected database.
+   * @return - A list of Users objects.
+   */
+  public List<NodeValue<Integer>> getUsers() throws SQLException {
+    List<NodeValue<Integer>> output = new ArrayList<>();
+    PreparedStatement prep = conn.prepareStatement("SELECT * FROM users");
+    ResultSet selected = prep.executeQuery();
+    while (selected.next()) {
+      String userID = selected.getString("user_id");
+      String weight = selected.getString("weight");
+      String bustSize = selected.getString("bust_size");
+      String height = selected.getString("height");
+      String age = selected.getString("age");
+      String bodyType = selected.getString("body_type");
+      String horoscope = selected.getString("horoscope");
+      NodeValue<Integer> user = new Users(userID, weight, bustSize, height, age, bodyType, horoscope);
+      output.add(user);
+    }
+    selected.close();
+    prep.close();
+    return output;
+  }
+
 }
