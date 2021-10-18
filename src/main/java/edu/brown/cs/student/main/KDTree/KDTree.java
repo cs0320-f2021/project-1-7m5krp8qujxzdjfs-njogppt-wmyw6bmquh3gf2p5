@@ -197,7 +197,12 @@ public class KDTree<V> {
     }
   }
 
-  public NodeValue<V> getTarget(Integer id) {
+  /**
+   * Finds the user in the KDTree with the given ID.
+   * @param id - The id of the target user.
+   * @return - The user as a NodeValue
+   */
+  public NodeValue<V> getTargetFromId(Integer id) {
     for (NodeValue<V> node : unsorted) {
       if (node.getId().equals(id)) {
         return node;

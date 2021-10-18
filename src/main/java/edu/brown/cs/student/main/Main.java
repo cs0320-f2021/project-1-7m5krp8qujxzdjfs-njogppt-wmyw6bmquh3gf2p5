@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
+import edu.brown.cs.student.main.KDTree.ClassifyFunction;
 import edu.brown.cs.student.main.KDTree.SimilarFunction;
 import edu.brown.cs.student.main.Math.SubtractFunction;
 import edu.brown.cs.student.main.Math.AddFunction;
@@ -72,6 +73,7 @@ public final class Main {
     REPLForMain.addFunctionToMap("sql", new SQLFunction());
     REPLForMain.addFunctionToMap("naive_neighbors", new NaiveNeighborsFunction());
     REPLForMain.addFunctionToMap("similar", new SimilarFunction());
+    REPLForMain.addFunctionToMap("classify", new ClassifyFunction());
     try {
       REPLForMain.run();
     } catch (IOException e) {
