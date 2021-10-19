@@ -1,6 +1,7 @@
 package edu.brown.cs.student.main.ORM;
 
 import edu.brown.cs.student.main.FunctionHolder;
+import edu.brown.cs.student.main.KDTree.KDTree;
 import edu.brown.cs.student.main.Star.StarData;
 import edu.brown.cs.student.main.dataTypes.Rent;
 import edu.brown.cs.student.main.dataTypes.Reviews;
@@ -44,5 +45,10 @@ public class DeleteFunction implements FunctionHolder {
   @Override
   public void setDatabase(Database db) {
     database = db;
+  }
+
+  @Override
+  public void setKDTree(KDTree<Integer> kdTree) {
+
   }
 }

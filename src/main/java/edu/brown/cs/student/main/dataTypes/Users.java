@@ -2,12 +2,13 @@ package edu.brown.cs.student.main.dataTypes;
 
 import edu.brown.cs.student.main.KDTree.NodeValue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A class that stores user info.
  */
-public class Users implements DataTypes, NodeValue {
+public class Users implements DataTypes, NodeValue<Integer> {
 
   private String userId;
   private String weight;
@@ -39,18 +40,27 @@ public class Users implements DataTypes, NodeValue {
   }
 
   @Override
-  public Object getId() { // new method added in NodeValue interface !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    return null;
+  public Integer getId() {
+    return Integer.parseInt(userId);
   }
 
   @Override
-  public List<Double> getNodeValue() { // new method added in NodeValue interface !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    return null;
+  public List<Double> getNodeValue() {
+    ArrayList<Double> coords = new ArrayList<>();
+    coords.add(this.getSecondAttribute() * 1.0);
+    coords.add(this.getFourthAttribute() * 1.0);
+    coords.add(this.getFifthAttribute() * 1.0);
+    return coords;
   }
 
   @Override
-  public Double getSingleNodeValue(int dim) { // new method added in NodeValue interface !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    return null;
+  public Double getSingleNodeValue(int dim) {
+    switch (dim) {
+      case 1 : return this.getSecondAttribute() * 1.0;
+      case 2 : return this.getFourthAttribute() * 1.0;
+      case 3 : return this.getFifthAttribute() * 1.0;
+      default: throw new IndexOutOfBoundsException();
+    }
   }
 
   /**
@@ -59,18 +69,18 @@ public class Users implements DataTypes, NodeValue {
    */
   public int getSecondAttribute() {
     String[] w = this.weight.split("l");
-    int lbs = Integer.parseInt(w[0]);
-    return lbs;
+    return Integer.parseInt(w[0]);
   }
 
   /**
    * Gets the height in inches.
    * @return - The height of a user in inches.
    */
+  @SuppressWarnings("checkstyle:MagicNumber")
   public int getFourthAttribute() {
     String[] h = this.height.split("'|\"");
     int ft = Integer.parseInt(h[0]);
-    int inches = Integer.parseInt(h[1]);
+    int inches = Integer.parseInt(h[1].replaceAll(" ", ""));
     return ft * 12 + inches;
   }
 
@@ -80,14 +90,6 @@ public class Users implements DataTypes, NodeValue {
    */
   public int getFifthAttribute() {
     return Integer.parseInt(this.age);
-  }
-
-  /**
-   * Returns the id of the user.
-   * @return - The user's id.
-   */
-  public int getFirstAttribute() {
-    return Integer.parseInt(this.userId);
   }
 
   @Override
@@ -109,5 +111,9 @@ public class Users implements DataTypes, NodeValue {
   @Override
   public int getID() {
     return Integer.parseInt(this.userId);
+  }
+
+  public String getSeventhAttribute() {
+    return this.horoscope;
   }
 }

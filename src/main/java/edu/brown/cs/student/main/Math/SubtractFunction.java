@@ -1,6 +1,7 @@
 package edu.brown.cs.student.main.Math;
 
 import edu.brown.cs.student.main.FunctionHolder;
+import edu.brown.cs.student.main.KDTree.KDTree;
 import edu.brown.cs.student.main.ORM.Database;
 import edu.brown.cs.student.main.Star.StarData;
 
@@ -21,6 +22,11 @@ public class SubtractFunction implements FunctionHolder {
 
   @Override
   public void setDatabase(Database db) {
+
+  }
+
+  @Override
+  public void setKDTree(KDTree<Integer> kdTree) {
 
   }
 }
