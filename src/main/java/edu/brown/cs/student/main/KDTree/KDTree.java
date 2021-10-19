@@ -20,99 +20,88 @@ public class KDTree<V> {
   public KDTree(Integer k) { this._k =  k; }
 
   public Node<NodeValue<V>> getRoot() { return _root; }
+  
+  // return List of "k" nearest neighbors to "targ"
+    public List<NodeValue<V>> getKNN(int k, NodeValue<V> targ) {
+        Comparator<Map<NodeValue<V>>> byDistance = Comparator.comparing(Map::getDist);
+        Comparator<Map<NodeValue<V>>> byReverseDistance = Comparator.comparing(keyDist -> -1 * keyDist.getDist());
+
+        PriorityQueue<Map<NodeValue<V>>> kNearestNeighborsQueue = new PriorityQueue<>(byDistance);
+        PriorityQueue<Map<NodeValue<V>>> kNearestNeighborsReverse = new PriorityQueue<>(byReverseDistance);
+
+        this.searchAlgorithm(_root, k+1, targ, kNearestNeighborsQueue, kNearestNeighborsReverse, 1); // the big boi
+
+        List<NodeValue<V>> returnNeighbors = new ArrayList<>();
+        while (returnNeighbors.size() < k) {
+            Map<NodeValue<V>> curr = kNearestNeighborsQueue.remove();
+            if (!(curr.getVal().getId().equals(targ.getId()))) { returnNeighbors.add(curr.getVal()); }
+        } return returnNeighbors;
+    }
 
   private Node<NodeValue<V>> generateOnStart(List<NodeValue<V>> nodeValuesLeft, int dim) {
-    if (nodeValuesLeft.size() != 0) {
-      int indexMid = nodeValuesLeft.size() / 2;
-      Comparator<NodeValue<V>> byDimension = Comparator.comparingDouble(nodeValues -> nodeValues.getSingleNodeValue(dim));
-      nodeValuesLeft.sort(byDimension);
-      NodeValue<V> medianNodeValues = nodeValuesLeft.get(indexMid); // find median nodeValue, nodeValues lesser, nodeValues greater than median
+        if (nodeValuesLeft.size() != 0) {
+            int indexMid = nodeValuesLeft.size() / 2;
+            Comparator<NodeValue<V>> byDimension = Comparator.comparingDouble(nodeValues -> nodeValues.getSingleNodeValue(dim));
+            nodeValuesLeft.sort(byDimension);
+            NodeValue<V> medianNodeValues = nodeValuesLeft.get(indexMid);
 
-      int i = 0;
-      List<NodeValue<V>> first = new ArrayList<>();
-      List<NodeValue<V>> second = new ArrayList<>();
-      for (NodeValue<V> element : nodeValuesLeft) {
-        if (i < indexMid) { first.add(element); }
-        else if (i > indexMid) { second.add(element); }
-        i++;
-      } List<List<NodeValue<V>>> finalResult = new ArrayList<>();
-      finalResult.add(first);
-      finalResult.add(second);
+            int i = 0;
+            List<NodeValue<V>> first = new ArrayList<>();
+            List<NodeValue<V>> second = new ArrayList<>();
+            for (NodeValue<V> element : nodeValuesLeft) {
+                if (i < indexMid) { first.add(element); }
+                else if (i > indexMid) { second.add(element); }
+                i++;
+            } List<List<NodeValue<V>>> finalResult = new ArrayList<>();
+            finalResult.add(first);
+            finalResult.add(second);
 
-      List<NodeValue<V>> less = finalResult.get(0);
-      List<NodeValue<V>> more = finalResult.get(1);
+            List<NodeValue<V>> less = finalResult.get(0);
+            List<NodeValue<V>> more = finalResult.get(1);
 
-      int dimNext; // calculate next dimension
-      if (dim + 1 > _k) { dimNext = 1; }
-      else { dimNext = dim + 1; }
+            int dimNext; // calculate next dimension
+            if (dim + 1 > _k) { dimNext = 1; }
+            else { dimNext = dim + 1; }
 
-      return new Node<>(medianNodeValues, generateOnStart(less, dimNext), generateOnStart(more, dimNext));
-    } else { return new Node<>(null, null, null); }
-  }
-
-  // return List of "k" nearest neighbors to "targ"
-  public List<NodeValue<V>> getKNN(int k, NodeValue<V> targ) {
-    k++; // this is to account for the fact that the neighbors will exclude the target star
-    Comparator<Map<NodeValue<V>>> byDistance = Comparator.comparing(Map::getDist);
-
-    Comparator<Map<NodeValue<V>>> byReverseDistance = Comparator.comparing(keyDist -> -1 * keyDist.getDist());
-    PriorityQueue<Map<NodeValue<V>>> kNearestNeighborsQueue = new PriorityQueue<>(byDistance);
-    // maintaining a reverse ordered PriorityQueue to facilitate ease of peeking maximum known neighbor distance
-    PriorityQueue<Map<NodeValue<V>>> kNearestNeighborsReverse = new PriorityQueue<>(byReverseDistance);
-
-    this.searchAlgorithm(_root, k, targ, kNearestNeighborsQueue, kNearestNeighborsReverse, 1); // the big boi
-
-    k--; // reset k to account for previous offset
-    List<NodeValue<V>> returnNeighbors = new ArrayList<>();
-    while (returnNeighbors.size() < k) {
-      Map<NodeValue<V>> curr = kNearestNeighborsQueue.remove();
-      if (!(curr.getVal().getId().equals(targ.getId()))) { returnNeighbors.add(curr.getVal()); }
-    } return returnNeighbors;
-  }
-
-  /** Update the PriorityQueue of KeyDistance with valid Neighbors on the path to the target in the passed Node tree.
-   @param k An int threshold representing the maximum number of IDs upto which Node values must be indiscriminately added to the PriorityQueue.
-   @param targ A Coordinate of type specified when constructing the KdTreeSearch representing the point around which all distances are calculated.
-   @param root A Node representing the sub-KdTree on which to recur the Nearest Neighbors Search algorithm.
-   @param dim The current cutting dimension in the recursion.
-   @param neighbors The PriorityQueue to which valid KeyDistances should be added in ascending order of their distances.
-   @param rev The PriorityQueue to which valid KeyDistances should be added in descending order of their distances to peek the maximum valid neighbor at that level of iteration.
-   */
-  private void searchAlgorithm(Node<NodeValue<V>> root, int k, NodeValue<V> targ, PriorityQueue<Map<NodeValue<V>>> neighbors, PriorityQueue<Map<NodeValue<V>>> rev, int dim) {
-    if (!(root.getValue() == null || k == 0)) {
-      double currDistSq = 0;
-      double distCurr;
-
-      int i = 1; // calculate the distance, which works for coordinates in any dimension
-      try { while (true) { currDistSq += Math.pow(root.getValue().getSingleNodeValue(i) - targ.getSingleNodeValue(i), 2); i++; } }
-      catch (IndexOutOfBoundsException e) { distCurr = Math.sqrt(currDistSq); }
-
-      NodeValue<V> rootId = root.getValue();
-      Map<NodeValue<V>> rootStarDist = new Map<>(rootId, distCurr);
-
-      // If not all k neighbors have been filled yet, indiscriminately add to the PriorityQueue
-      if (neighbors.size() < k || distCurr <= rev.peek().getDist()) { neighbors.add(rootStarDist); rev.add(rootStarDist); }
-
-      int nextDimension; // get the next dimension
-      if (dim + 1 > targ.getNodeValue().size()) { nextDimension = 1; }
-      else { nextDimension = dim + 1; }
-
-      if (neighbors.size() < k) { // If not all k neighbors have been filled yet, recurse in both children
-        this.searchAlgorithm(root.getLeft(), k, targ, neighbors, rev, nextDimension);
-        this.searchAlgorithm(root.getRight(), k, targ, neighbors, rev, nextDimension);
-      } else {
-        double maxEuclideanDistance = rev.peek().getDist();
-        double axisDistance = Math.abs(targ.getSingleNodeValue(dim) - root.getValue().getSingleNodeValue(dim));
-        if (maxEuclideanDistance >= axisDistance) { // recur on both children
-          this.searchAlgorithm(root.getLeft(), k, targ, neighbors, rev, nextDimension);
-          this.searchAlgorithm(root.getRight(), k, targ, neighbors, rev, nextDimension);
-        } else {
-          if (root.getValue().getSingleNodeValue(dim) < targ.getSingleNodeValue(dim)) { searchAlgorithm(root.getRight(), k, targ, neighbors, rev, nextDimension); }
-          else if (root.getValue().getSingleNodeValue(dim) > targ.getSingleNodeValue(dim)) { searchAlgorithm(root.getLeft(), k, targ, neighbors, rev, nextDimension); }
-        }
-      }
+            return new Node<>(medianNodeValues, generateOnStart(less, dimNext), generateOnStart(more, dimNext));
+        } else { return new Node<>(null, null, null); }
     }
-  }
+
+  // recursive search algorithm, private bc only used by getKNN()
+    private void searchAlgorithm(Node<NodeValue<V>> root, int k, NodeValue<V> targ, PriorityQueue<Map<NodeValue<V>>> neighbors, PriorityQueue<Map<NodeValue<V>>> rev, int dim) {
+        if (!(root.getValue() == null || k == 0)) {
+            double currDistSq = 0;
+            double distCurr;
+
+            int i = 1;
+            try { while (true) { currDistSq += Math.pow(root.getValue().getSingleNodeValue(i) - targ.getSingleNodeValue(i), 2); i++; } }
+            catch (IndexOutOfBoundsException e) { distCurr = Math.sqrt(currDistSq); }
+
+            NodeValue<V> rootId = root.getValue();
+            Map<NodeValue<V>> rootStarDist = new Map<>(rootId, distCurr);
+
+            if (neighbors.size() < k || distCurr <= rev.peek().getDist()) { neighbors.add(rootStarDist); rev.add(rootStarDist); }
+
+            int nextDimension; // get the next dimension
+            if (dim + 1 > targ.getNodeValue().size()) { nextDimension = 1; }
+            else { nextDimension = dim + 1; }
+
+            if (neighbors.size() < k) {
+                this.searchAlgorithm(root.getLeft(), k, targ, neighbors, rev, nextDimension);
+                this.searchAlgorithm(root.getRight(), k, targ, neighbors, rev, nextDimension);
+            } else {
+                double maxEuclideanDistance = rev.peek().getDist();
+                double axisDistance = Math.abs(targ.getSingleNodeValue(dim) - root.getValue().getSingleNodeValue(dim));
+                if (maxEuclideanDistance >= axisDistance) {
+                    this.searchAlgorithm(root.getLeft(), k, targ, neighbors, rev, nextDimension);
+                    this.searchAlgorithm(root.getRight(), k, targ, neighbors, rev, nextDimension);
+                } else {
+                    if (root.getValue().getSingleNodeValue(dim) < targ.getSingleNodeValue(dim)) { searchAlgorithm(root.getRight(), k, targ, neighbors, rev, nextDimension); }
+                    else if (root.getValue().getSingleNodeValue(dim) > targ.getSingleNodeValue(dim)) { searchAlgorithm(root.getLeft(), k, targ, neighbors, rev, nextDimension); }
+                }
+            }
+        }
+    }
 
   private Node<NodeValue<V>> getMidpointToNode(int depth, List<NodeValue<V>> nodeValueList) {
     NodeValueHandlerClass nodeValueSorter = new NodeValueHandlerClass();
