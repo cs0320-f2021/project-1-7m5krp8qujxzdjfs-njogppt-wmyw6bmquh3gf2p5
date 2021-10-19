@@ -1,0 +1,10 @@
+ARGS
+
+INPUT
+database data/project-1/emptyEditable2.sqlite3
+sql `SELECT fit FROM rent WHERE id=2`
+sql `UPDATE rent SET rating='9' WHERE id=2`
+OUTPUT
+Database at data/project-1/emptyEditable2.sqlite3 loaded in.
+fit
+END

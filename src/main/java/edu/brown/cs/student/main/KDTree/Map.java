@@ -1,10 +1,11 @@
 package edu.brown.cs.student.main.KDTree;
 
-// Class to create a mapping of ID to distance.
+// Class to create a mapping of value to distance.
 public class Map<V> {
-    private final V key; private final Double distance;
+    private final V _value;
+    private final Double _dist;
 
-    public Map(V key, Double distance) { this.key = key; this.distance = distance; }
-    public Double getDistance() { return distance; }
-    public V getKey() { return key; }
+    public Map(V val, Double dist) { this._value = val; this._dist = dist; }
+    public Double getDist() { return _dist; }
+    public V getVal() { return _value; }
 }

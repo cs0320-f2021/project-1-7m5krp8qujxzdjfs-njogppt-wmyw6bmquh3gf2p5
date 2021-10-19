@@ -46,4 +46,9 @@ public class TestObject implements NodeValue<Integer> {
 
   @Override
   public int getFifthAttribute() { return 0; }
-}
+
+  @Override
+  public String getSeventhAttribute() {
+    return "";
+  }
+} 

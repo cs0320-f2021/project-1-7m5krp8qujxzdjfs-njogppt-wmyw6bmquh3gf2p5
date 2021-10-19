@@ -1,20 +1,18 @@
-package edu.brown.cs.student.main.ORM;
+package edu.brown.cs.student.main.Star;
 
-import edu.brown.cs.student.main.Star;
-import edu.brown.cs.student.main.StarData;
+import edu.brown.cs.student.main.FunctionHolder;
+import edu.brown.cs.student.main.KDTree.KDTree;
+import edu.brown.cs.student.main.ORM.Database;
 
 import java.util.List;
 
 
 public class NaiveNeighborsFunction implements FunctionHolder {
 
-  public NaiveNeighborsFunction() {
-  }
-
+  private StarData starData = null;
 
   @Override
   public void implementFunction(String[] arguments) {
-    StarData starData = new StarData(arguments[1]);
     if (starData.getStars().size() == 0) {
       System.out.println("There are no stars available. "
           + "Make sure to run the stars command with a file containing star data.");
@@ -34,5 +32,20 @@ public class NaiveNeighborsFunction implements FunctionHolder {
     } else {
       System.out.println("ERROR: The arguments you provided were incorrect.");
     }
+  }
+
+  @Override
+  public void setStarData(StarData sd) {
+    starData = sd;
+  }
+
+  @Override
+  public void setDatabase(Database db) {
+
+  }
+
+  @Override
+  public void setKDTree(KDTree<Integer> kdTree) {
+
   }
 }

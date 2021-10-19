@@ -1,0 +1,9 @@
+ARGS
+
+INPUT
+database data/project-1/emptyEditable2.sqlite3
+update 2 fit 2 2 9 vacation dress rating 8
+OUTPUT
+Database at data/project-1/emptyEditable2.sqlite3 loaded in.
+Review with id: 2 updated.
+END

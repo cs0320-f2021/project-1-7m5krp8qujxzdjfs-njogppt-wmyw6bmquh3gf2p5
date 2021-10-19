@@ -1,4 +1,4 @@
-package edu.brown.cs.student.main;
+package edu.brown.cs.student.main.Star;
 
 /**
  * A class that stores an individual star's info.
